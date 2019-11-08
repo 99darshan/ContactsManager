@@ -32,10 +32,14 @@ var contacts = [{
     address: "123 street mars"
 }, ];
 
+const {pool} = require('../DAL/dbConfig');
 let contactsController = {
     getAllContacts:  function(req, res,next){
-        
-        res.status(200).json(contacts);
+        pool.query('select * from books', (error, result) => {
+            if(error) throw error;
+            res.status(200).json(result.rows);
+        });
+        //res.status(200).json(contacts);
     },
 
     getContactById: function(req, res,next){
