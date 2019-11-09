@@ -33,13 +33,16 @@ var contacts = [{
 }, ];
 
 const {pool} = require('../DAL/dbConfig');
+
 let contactsController = {
-    getAllContacts:  function(req, res,next){
-        pool.query('select * from books', (error, result) => {
-            if(error) throw error;
+    getAllContacts: async (req, res,next)=>{
+        try {
+            let result = await pool.query(`SELECT * from contacts;`);
+            console.table(result.table);
             res.status(200).json(result.rows);
-        });
-        //res.status(200).json(contacts);
+        } catch (error) {
+            res.status(500).json(error.message);
+        }
     },
 
     getContactById: function(req, res,next){
