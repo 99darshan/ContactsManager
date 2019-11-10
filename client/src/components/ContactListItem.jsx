@@ -26,6 +26,6 @@ export default function ContactListItem(props) {
 
 ContactListItem.propTypes = {
   avatar: PropTypes.string,
-  name: PropTypes.string,
+  name: PropTypes.string.isRequired,
   phoneNumber: PropTypes.string
 };
