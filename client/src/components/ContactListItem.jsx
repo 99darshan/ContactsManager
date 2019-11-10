@@ -7,11 +7,14 @@ import {
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { Divider } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 export default function ContactListItem(props) {
   return (
     <React.Fragment>
       <ListItem
+        component={Link}
+        to="/details"
         alignItems="flex-start"
         button
         onClick={() => {

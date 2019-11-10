@@ -28,6 +28,7 @@ export default class Add extends Component {
           title="Add Contact"
           actionButtonText="Save"
           leadingIcon={<Close />}
+          screen="add"
         />
         <div
           style={{

@@ -9,11 +9,16 @@ import {
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import {
+  Favorite,
+  FavoriteBorder,
+  DeleteForeverRounded
+} from "@material-ui/icons";
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
   },
-  leadingButton: {
+  actionButton: {
     marginRight: theme.spacing(2)
   },
   title: {
@@ -32,7 +37,7 @@ export default function NavBar(props) {
           component={Link}
           to="/"
           edge="start"
-          className={classes.leadingButton}
+          className={classes.actionButton}
           color="inherit"
           aria-label="menu"
         >
@@ -41,8 +46,37 @@ export default function NavBar(props) {
         <Typography variant="h6" className={classes.title}>
           {props.title}
         </Typography>
+        {(props.screen === "home" || props.screen === "add") && (
+          <Button color="inherit">{props.actionButtonText}</Button>
+        )}
+        {props.screen == "details" && (
+          <React.Fragment>
+            <IconButton
+              onClick={() => {
+                console.log("favorite clicked");
+              }}
+              edge="start"
+              className={classes.actionButton}
+              color="inherit"
+              aria-label="favorite"
+            >
+              {/* TODO: toogle icon to border and filled for favorite on click, if already favorited show filled icon */}
+              <FavoriteBorder />
+            </IconButton>
 
-        <Button color="inherit">{props.actionButtonText}</Button>
+            <IconButton
+              onClick={() => {
+                console.log("delete clicked");
+              }}
+              edge="start"
+              className={classes.actionButton}
+              color="inherit"
+              aria-label="menu"
+            >
+              <DeleteForeverRounded />
+            </IconButton>
+          </React.Fragment>
+        )}
       </Toolbar>
     </AppBar>
   );
@@ -50,6 +84,7 @@ export default function NavBar(props) {
 
 NavBar.propType = {
   leadingIcon: PropTypes.element,
-  title: PropTypes.string.isRequired,
-  actionButtonText: PropTypes.string
+  title: PropTypes.string,
+  actionButtonText: PropTypes.string,
+  screen: PropTypes.oneOf(["home", "add", "details"]).isRequired
 };

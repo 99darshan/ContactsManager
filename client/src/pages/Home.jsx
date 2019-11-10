@@ -14,6 +14,7 @@ export default class Home extends Component {
           title="Contacts Manager"
           actionButtonText="Log in"
           leadingIcon={<Menu />}
+          screen="home"
         />
         <ContactListItem
           avatar="https://i.pravatar.cc/300"
