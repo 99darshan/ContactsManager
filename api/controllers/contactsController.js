@@ -1,37 +1,4 @@
-var contacts = [{
-    id: 1,
-    firstName:'super',
-    lastName: 'man',
-    company: 'Milky way',
-    email: 'abc@email.com',
-    phoneNumber:9845214556,
-    address: "123 street mars"
-}, {
-    id: 2,
-    firstName:'pluto',
-    lastName: 'kumar',
-    company: 'supernova',
-    email: 'abc@email.com',
-    phoneNumber:9845214556,
-    address: "123 street mars"
-},{
-    id: 3,
-    firstName:'ninja',
-    lastName: 'hataudi',
-    company: 'Nick',
-    email: 'abc@email.com',
-    phoneNumber:9845214556,
-    address: "123 street mars"
-}, {
-    id: 3,
-    firstName:'moon',
-    lastName: 'dude',
-    company: 'Pizza Factory',
-    email: 'abc@email.com',
-    phoneNumber:9845214556,
-    address: "123 street mars"
-}, ];
-
+//TODO: REMOVE contacts list
 const {pool} = require('../DAL/dbConfig');
 
 let contactsController = {
@@ -77,7 +44,8 @@ let contactsController = {
             // TODO: validate and sanitize the req.body inputs, handle sql injection
             const result = await pool.query(insertScript);
             //if(result.rows.length === 0) return res.stat TODO:
-            res.status(201).json(result.rows);
+            //res.status(201).json(result.rows);
+            res.sendStatus(201);
 
         } catch (error) {
             res.status(500).json(error);
@@ -85,10 +53,11 @@ let contactsController = {
     },
     deleteContact: async(req,res,next)=>{
         try{
+            // TODO: return 200 if the resource to be deleted doesn't exist??
             console.log('delete called');
             const parsedId = parseInt(req.params.id);
             const result = await pool.query(`Delete FROM contacts where id=${parsedId}`);
-            res.status(200);
+            res.sendStatus(200);
         }catch(error){
             res.status(500).json(error);
         }
