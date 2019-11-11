@@ -50,7 +50,7 @@ export default function NavBar(props) {
         {props.screen === "home" && (
           <Button color="inherit">{props.actionButtonText}</Button>
         )}
-        {props.screen == "details" && (
+        {props.screen === "details" && (
           <React.Fragment>
             <IconButton
               onClick={() => {

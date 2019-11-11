@@ -1,21 +1,9 @@
 import React, { Component } from "react";
-import {
-  ArrowBack,
-  Edit,
-  Person,
-  Phone,
-  FileCopy,
-  AddPhotoAlternate,
-  Close
-} from "@material-ui/icons";
-import { Fab, TextField, InputAdornment, IconButton } from "@material-ui/core";
+import { ArrowBack, Edit } from "@material-ui/icons";
 import NavBar from "../components/NavBar";
 import FabButton from "../components/FabButton";
 import ContactTextFields from "../components/ContactTextFields";
 export default class Details extends Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
       <React.Fragment>
