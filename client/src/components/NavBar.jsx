@@ -35,11 +35,12 @@ export default function NavBar(props) {
         {/* TODO: take to property as prop?? might not always need to navigate, take IconButton as a prop instead? */}
         <IconButton
           component={Link}
-          to="/"
+          to={props.navigateTo}
           edge="start"
           className={classes.actionButton}
           color="inherit"
           aria-label="menu"
+          onClick={props.leadingButtonClick}
         >
           {props.leadingIcon}
         </IconButton>
@@ -84,7 +85,9 @@ export default function NavBar(props) {
 
 NavBar.propType = {
   leadingIcon: PropTypes.element,
+  navigateTo: PropTypes.string,
   title: PropTypes.string,
   actionButtonText: PropTypes.string,
+  leadinButtonClick: PropTypes.func,
   screen: PropTypes.oneOf(["home", "add", "details"]).isRequired
 };

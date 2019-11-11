@@ -19,6 +19,7 @@ export default function FabButton(props) {
   const classes = useStyles();
   return (
     <Fab
+      onClick={props.onClick}
       component={Link}
       to={props.navigateTo}
       variant="extended"
@@ -35,6 +36,7 @@ export default function FabButton(props) {
 
 FabButton.propTypes = {
   navigateTo: PropTypes.string,
-  labelText: PropTypes.string.isRequired,
-  icon: PropTypes.element
+  labelText: PropTypes.string,
+  icon: PropTypes.element,
+  onClick: PropTypes.func
 };
