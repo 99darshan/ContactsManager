@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import NavBar from "../components/NavBar";
+import ContactTextFields from "../components/ContactTextFields";
 import {
   ArrowBack,
   Person,
@@ -26,90 +27,12 @@ export default class Add extends Component {
       <React.Fragment>
         <NavBar
           title="Add Contact"
-          actionButtonText="Save"
           leadingIcon={<Close />}
           screen="add"
           navigateTo="/"
         />
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "1rem", // TODO: use material theme spacing
-            border: "1px solid red"
-          }}
-        >
-          <div>
-            <Fab color="secondary" aria-label="addProfilePhoto">
-              <AddPhotoAlternate />
-            </Fab>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              border: "1px solid blue",
-              padding: "1rem" // TODO: use material theme spacing
-            }}
-          >
-            <TextField
-              style={{ marginTop: "16px" }}
-              fullWidth
-              id="firstName"
-              label="First Name"
-              type="search"
-              required
-              variant="outlined"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Person />
-                  </InputAdornment>
-                )
-              }}
-            />
 
-            <TextField
-              style={{ marginTop: "16px" }}
-              fullWidth
-              id="lastName"
-              label="Last Name"
-              type="search"
-              variant="outlined"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Person />
-                  </InputAdornment>
-                )
-              }}
-            />
-            <TextField
-              style={{ marginTop: "16px" }}
-              id="phoneNumber"
-              label="Phone Number"
-              required
-              variant="outlined"
-              type="tel"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Phone />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton>
-                      <FileCopy />
-                    </IconButton>
-                  </InputAdornment>
-                )
-              }}
-            />
-          </div>
-        </div>
+        <ContactTextFields isReadOnly={false} />
       </React.Fragment>
     );
   }

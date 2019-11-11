@@ -1,33 +1,35 @@
 import React, { Component } from "react";
 import RaisedButton from "../components/RaisedButton";
 import FlatButton from "../components/FlatButton";
-
+import PropTypes from "prop-types";
 import {
-  ArrowBack,
   Person,
-  PersonOutline,
   Phone,
   Business,
   Email,
   Room,
   FileCopy,
-  Close,
   AddPhotoAlternate,
   Save
 } from "@material-ui/icons";
-import {
-  TextField,
-  Grid,
-  InputAdornment,
-  IconButton,
-  Fab
-} from "@material-ui/core";
-// TODO: change to functional component
-export default class ContactTextFields extends Component {
-  render() {
-    return (
+import { TextField, InputAdornment, IconButton, Fab } from "@material-ui/core";
+export default function ContactTextFields(props) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        border: "1px solid  red",
+        marginTop: "2rem"
+      }}
+    >
       <div
-        style={{ width: "100%", maxWidth: "800px", border: "1px solid yellow" }}
+        style={{
+          width: "100%",
+          maxWidth: "800px",
+          border: "1px solid yellow"
+        }}
       >
         <div
           style={{
@@ -49,8 +51,9 @@ export default class ContactTextFields extends Component {
           }}
         >
           <TextField
-            style={{ marginTop: "16px" }}
+            style={{ marginTop: "1rem" }}
             fullWidth
+            disabled={props.isReadOnly}
             id="firstName"
             label="First Name"
             type="search"
@@ -66,7 +69,8 @@ export default class ContactTextFields extends Component {
           />
 
           <TextField
-            style={{ marginTop: "16px" }}
+            style={{ marginTop: "1rem" }}
+            disabled={props.isReadOnly}
             fullWidth
             id="lastName"
             label="Last Name"
@@ -81,7 +85,8 @@ export default class ContactTextFields extends Component {
             }}
           />
           <TextField
-            style={{ marginTop: "16px" }}
+            style={{ marginTop: "1rem" }}
+            disabled={props.isReadOnly}
             id="phoneNumber"
             label="Phone Number"
             required
@@ -93,9 +98,14 @@ export default class ContactTextFields extends Component {
                   <Phone />
                 </InputAdornment>
               ),
-              endAdornment: (
+
+              endAdornment: props.isReadOnly && (
                 <InputAdornment position="end">
-                  <IconButton>
+                  <IconButton
+                    onClick={() => {
+                      console.log("copied to clipboard clicked");
+                    }}
+                  >
                     <FileCopy />
                   </IconButton>
                 </InputAdornment>
@@ -103,32 +113,38 @@ export default class ContactTextFields extends Component {
             }}
           />
         </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "flex-end",
-            border: "1px solid black",
-            padding: "1rem"
-          }}
-        >
-          <RaisedButton
-            label="Save"
-            startIcon={<Save />}
-            onClick={() => {
-              console.log("Saved on Edit.");
+        {!props.isReadOnly && (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              border: "1px solid black",
+              padding: "1rem"
             }}
-          />
-          <div style={{ marginRight: "1rem" }} />
-          <FlatButton
-            label="Cancel"
-            onClick={() => {
-              console.log("Caneled on Edit.");
-            }}
-          />
-        </div>
+          >
+            <RaisedButton
+              label="Save"
+              startIcon={<Save />}
+              onClick={() => {
+                console.log("Saved on Edit.");
+              }}
+            />
+            <div style={{ marginRight: "1rem" }} />
+            <FlatButton
+              label="Cancel"
+              onClick={() => {
+                console.log("Caneled on Edit.");
+              }}
+            />
+          </div>
+        )}
       </div>
-      // {/* TODO: work on flex styling unnecessary flexes */ }
-    );
-  }
+    </div>
+    // {/* TODO: work on flex styling unnecessary flexes */ }
+  );
 }
+
+ContactTextFields.propTypes = {
+  isReadOnly: PropTypes.bool.isRequired
+};

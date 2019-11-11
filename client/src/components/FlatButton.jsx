@@ -1,7 +1,11 @@
 import React from "react";
 import { Button } from "@material-ui/core";
+import PropTypes from "prop-types";
 export default function FlatButton(props) {
   return <Button onClick={props.onClick}>{props.label}</Button>;
 }
 
-// TODO: add prop types
+FlatButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  label: PropTypes.string.isRequired
+};

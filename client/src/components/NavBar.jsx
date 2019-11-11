@@ -47,7 +47,7 @@ export default function NavBar(props) {
         <Typography variant="h6" className={classes.title}>
           {props.title}
         </Typography>
-        {(props.screen === "home" || props.screen === "add") && (
+        {props.screen === "home" && (
           <Button color="inherit">{props.actionButtonText}</Button>
         )}
         {props.screen == "details" && (

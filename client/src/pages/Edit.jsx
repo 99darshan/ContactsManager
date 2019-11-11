@@ -9,18 +9,7 @@ export default class Edit extends Component {
       <React.Fragment>
         <NavBar leadingIcon={<ArrowBack />} title="Edit" navigateTo="/" />
 
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            border: "1px solid  red",
-            alignItems: "stretch",
-            marginTop: "2rem"
-          }}
-        >
-          <ContactTextFields />
-        </div>
+        <ContactTextFields isReadOnly={false} />
       </React.Fragment>
     );
   }
