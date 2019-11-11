@@ -29,6 +29,7 @@ export default class Add extends Component {
           actionButtonText="Save"
           leadingIcon={<Close />}
           screen="add"
+          navigateTo="/"
         />
         <div
           style={{

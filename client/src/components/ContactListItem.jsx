@@ -3,11 +3,14 @@ import {
   ListItem,
   ListItemAvatar,
   Avatar,
-  ListItemText
+  ListItemText,
+  ListItemSecondaryAction,
+  IconButton
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { Divider } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { Star, Edit } from "@material-ui/icons";
 
 export default function ContactListItem(props) {
   return (
@@ -17,6 +20,8 @@ export default function ContactListItem(props) {
         to="/details"
         alignItems="flex-start"
         button
+        divider
+        ContainerComponent="div"
         onClick={() => {
           console.log("list tem clicked");
         }}
@@ -24,9 +29,29 @@ export default function ContactListItem(props) {
         <ListItemAvatar>
           <Avatar alt={props.name} src={props.avatar} />
         </ListItemAvatar>
+
         <ListItemText primary={props.name} secondary={props.phoneNumber} />
+        <ListItemSecondaryAction>
+          <IconButton
+            edge="end"
+            aria-label="favorite"
+            onClick={() => {
+              console.log("favorite clicked");
+            }}
+          >
+            <Star />
+          </IconButton>
+          <IconButton
+            edge="end"
+            aria-label="edit"
+            onClick={() => {
+              console.log("edit clicked");
+            }}
+          >
+            <Edit />
+          </IconButton>
+        </ListItemSecondaryAction>
       </ListItem>
-      <Divider />
     </React.Fragment>
   );
 }

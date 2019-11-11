@@ -14,37 +14,14 @@ import FabButton from "../components/FabButton";
 export default class Details extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isReadonlyMode: true
-    };
   }
   render() {
     return (
       <React.Fragment>
-        {this.state.isReadonlyMode ? (
-          <NavBar leadingIcon={<ArrowBack />} screen="details" navigateTo="/" />
-        ) : (
-          <NavBar
-            leadingIcon={<Close />}
-            screen="details"
-            navigateTo="/details"
-            leadingButtonClick={() => {
-              console.log("close clicked on details");
-              this.setState({ isReadonlyMode: true });
-            }}
-          />
-        )}
-        {this.state.isReadonlyMode && (
-          <FabButton
-            onClick={() => {
-              console.log("edit clicked");
-              this.setState({ isReadonlyMode: false });
-            }}
-            navigateTo="/details"
-            labelText="Edit"
-            icon={<Edit />}
-          />
-        )}
+        <NavBar leadingIcon={<ArrowBack />} screen="details" navigateTo="/" />
+
+        <FabButton navigateTo="/edit" labelText="Edit" icon={<Edit />} />
+
         <div
           style={{
             display: "flex",
@@ -69,7 +46,7 @@ export default class Details extends Component {
             }}
           >
             <TextField
-              disabled={this.state.isReadonlyMode}
+              disabled={true}
               style={{ marginTop: "16px" }}
               fullWidth
               id="firstName"
@@ -87,7 +64,7 @@ export default class Details extends Component {
             />
 
             <TextField
-              disabled={this.state.isReadonlyMode}
+              disabled={true}
               style={{ marginTop: "16px" }}
               fullWidth
               id="lastName"
@@ -103,7 +80,7 @@ export default class Details extends Component {
               }}
             />
             <TextField
-              disabled={this.state.isReadonlyMode}
+              disabled={true}
               style={{ marginTop: "16px" }}
               id="phoneNumber"
               label="Phone Number"

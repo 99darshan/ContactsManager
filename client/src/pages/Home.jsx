@@ -15,6 +15,7 @@ export default class Home extends Component {
           actionButtonText="Log in"
           leadingIcon={<Menu />}
           screen="home"
+          navigateTo="/"
         />
         <ContactListItem
           avatar="https://i.pravatar.cc/300"
