@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useContext, useState } from "react";
 import RaisedButton from "../components/RaisedButton";
 import FlatButton from "../components/FlatButton";
 import PropTypes from "prop-types";
@@ -13,7 +13,21 @@ import {
   Save
 } from "@material-ui/icons";
 import { TextField, InputAdornment, IconButton, Fab } from "@material-ui/core";
+import { ContactsContext } from "../appState/contactsContext";
+
 export default function ContactTextFields(props) {
+  const [{ contacts }, dispatch] = useContext(ContactsContext);
+  //console.table(props.contact);
+  let [firstNameValue, setFirstNameValue] = useState(
+    props.contact ? props.contact.firstName : ""
+  );
+  let [lastNameValue, setLastNameValue] = useState(
+    props.contact ? props.contact.lastName : ""
+  );
+  let [phoneNumberValue, setPhoneNumberValue] = useState(
+    props.contact ? props.contact.phoneNumber : ""
+  );
+
   return (
     <div
       style={{
@@ -52,7 +66,7 @@ export default function ContactTextFields(props) {
         >
           <TextField
             style={{ marginTop: "1rem" }}
-            value={props.contact ? props.contact.firstName : ""}
+            value={firstNameValue}
             fullWidth
             disabled={props.isReadOnly}
             id="firstName"
@@ -60,6 +74,9 @@ export default function ContactTextFields(props) {
             type="search"
             required
             variant="outlined"
+            onChange={e => {
+              setFirstNameValue(e.target.value);
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -71,13 +88,16 @@ export default function ContactTextFields(props) {
 
           <TextField
             style={{ marginTop: "1rem" }}
-            value={props.contact ? props.contact.lastName : ""}
+            value={lastNameValue}
             disabled={props.isReadOnly}
             fullWidth
             id="lastName"
             label="Last Name"
             type="search"
             variant="outlined"
+            onChange={e => {
+              setLastNameValue(e.target.value);
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -88,13 +108,16 @@ export default function ContactTextFields(props) {
           />
           <TextField
             style={{ marginTop: "1rem" }}
-            value={props.contact ? props.contact.phoneNumber : ""}
+            value={phoneNumberValue}
             disabled={props.isReadOnly}
             id="phoneNumber"
             label="Phone Number"
             required
             variant="outlined"
             type="tel"
+            onChange={e => {
+              setPhoneNumberValue(e.target.value);
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -130,14 +153,23 @@ export default function ContactTextFields(props) {
               label="Save"
               startIcon={<Save />}
               onClick={() => {
-                console.log("Saved on Edit.");
+                console.log("Saved on Edit or Add .");
+                dispatch({
+                  type: "ADD",
+                  payload: {
+                    id: Math.floor(Math.random() * 100) + 1,
+                    firstName: firstNameValue,
+                    lastName: lastNameValue,
+                    phoneNumber: phoneNumberValue
+                  }
+                });
               }}
             />
             <div style={{ marginRight: "1rem" }} />
             <FlatButton
               label="Cancel"
               onClick={() => {
-                console.log("Caneled on Edit.");
+                console.log("Caneled on Edit or Add.");
               }}
             />
           </div>

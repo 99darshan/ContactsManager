@@ -5,10 +5,15 @@ import Details from './pages/Details';
 import Edit from './pages/Edit';
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import * as routes from './constants/routeConstants';
+import { ContactsProvider } from "./appState/contactsContext";
+import {initialState} from "./appState/contactsStore";
+import {contactsReducer} from "./appState/contactsReducer";
+
 
 function App() {
   return (
-    <BrowserRouter>
+    <ContactsProvider reducer={contactsReducer} initialState={initialState}>
+      <BrowserRouter>
       <Switch>
         <Route path={routes.HOME} exact><Home/></Route>
         <Route path={routes.ADD} exact><Add/></Route>
@@ -19,6 +24,8 @@ function App() {
         {/* TODO: add not found route and corresponding component */}
       </Switch>
     </BrowserRouter>
+    </ContactsProvider>
+    
 
   );
 }
