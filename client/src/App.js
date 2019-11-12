@@ -14,8 +14,9 @@ function App() {
         <Route path={routes.ADD} exact><Add/></Route>
         {/* NOTE: render Details screen using the component prop not as a child, react router v5 will have an undefined match prop if used as a child instead of a component prop */}
         <Route path={routes.DETAILS} exact component={Details}></Route>
-        <Route path={routes.EDIT} exact><Edit/></Route>
-
+        {/* <Route path={routes.EDIT} exact><Edit/></Route> */} 
+        <Route path={routes.EDIT} exact component={Edit}></Route>
+        {/* TODO: add not found route and corresponding component */}
       </Switch>
     </BrowserRouter>
 
