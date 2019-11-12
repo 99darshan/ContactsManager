@@ -10,13 +10,14 @@ import {
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Star, Edit } from "@material-ui/icons";
+import { DETAILS } from "../constants/routeConstants";
 
 export default function ContactListItem(props) {
   return (
     <React.Fragment>
       <ListItem
         component={Link}
-        to="/details"
+        to={DETAILS.replace(":id", props.id)}
         alignItems="flex-start"
         button
         divider

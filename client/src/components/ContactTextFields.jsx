@@ -52,6 +52,7 @@ export default function ContactTextFields(props) {
         >
           <TextField
             style={{ marginTop: "1rem" }}
+            value={props.contact.firstName}
             fullWidth
             disabled={props.isReadOnly}
             id="firstName"
@@ -70,6 +71,7 @@ export default function ContactTextFields(props) {
 
           <TextField
             style={{ marginTop: "1rem" }}
+            value={props.contact.lastName}
             disabled={props.isReadOnly}
             fullWidth
             id="lastName"
@@ -86,6 +88,7 @@ export default function ContactTextFields(props) {
           />
           <TextField
             style={{ marginTop: "1rem" }}
+            value={props.contact.phoneNumber}
             disabled={props.isReadOnly}
             id="phoneNumber"
             label="Phone Number"
@@ -146,5 +149,6 @@ export default function ContactTextFields(props) {
 }
 
 ContactTextFields.propTypes = {
-  isReadOnly: PropTypes.bool.isRequired
+  isReadOnly: PropTypes.bool.isRequired,
+  contact: PropTypes.object
 };
