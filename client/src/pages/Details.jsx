@@ -6,10 +6,10 @@ import ContactTextFields from "../components/ContactTextFields";
 import { EDIT } from "../constants/routeConstants";
 import { ContactsContext } from "../appState/contactsContext";
 export default function Details(props) {
-  let [{ contacts }, dispatch] = useContext(ContactsContext);
+  let { state, dispatch } = useContext(ContactsContext);
   const { match } = props;
   const paramId = parseInt(match.params.id);
-  const currentContact = contacts.find(contact => contact.id === paramId);
+  const currentContact = state.contacts.find(contact => contact.id === paramId);
 
   return (
     <React.Fragment>

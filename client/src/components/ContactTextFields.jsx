@@ -16,7 +16,8 @@ import { TextField, InputAdornment, IconButton, Fab } from "@material-ui/core";
 import { ContactsContext } from "../appState/contactsContext";
 
 export default function ContactTextFields(props) {
-  const [{ contacts }, dispatch] = useContext(ContactsContext);
+  const { state, dispatch } = useContext(ContactsContext);
+  const { contacts } = state;
   //console.table(props.contact);
   let [firstNameValue, setFirstNameValue] = useState(
     props.contact ? props.contact.firstName : ""
@@ -155,7 +156,7 @@ export default function ContactTextFields(props) {
               onClick={() => {
                 console.log("Saved on Edit or Add .");
                 dispatch({
-                  type: "ADD",
+                  type: props.saveActionType, // should be either "ADD" or "EDIT"
                   payload: {
                     id: Math.floor(Math.random() * 100) + 1,
                     firstName: firstNameValue,
@@ -163,6 +164,7 @@ export default function ContactTextFields(props) {
                     phoneNumber: phoneNumberValue
                   }
                 });
+                props.routeHistory.goBack();
               }}
             />
             <div style={{ marginRight: "1rem" }} />
@@ -170,7 +172,9 @@ export default function ContactTextFields(props) {
               label="Cancel"
               onClick={() => {
                 console.log("Caneled on Edit or Add.");
+                props.routeHistory.goBack();
               }}
+              //onClick={props.onCancel}
             />
           </div>
         )}
@@ -182,5 +186,7 @@ export default function ContactTextFields(props) {
 
 ContactTextFields.propTypes = {
   isReadOnly: PropTypes.bool.isRequired,
-  contact: PropTypes.object
+  contact: PropTypes.object,
+  routeHistory: PropTypes.object,
+  saveActionType: PropTypes.oneOf(["EDIT", "ADD"])
 };

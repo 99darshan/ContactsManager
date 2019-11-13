@@ -5,18 +5,15 @@ import Details from './pages/Details';
 import Edit from './pages/Edit';
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import * as routes from './constants/routeConstants';
-import { ContactsProvider } from "./appState/contactsContext";
-import {initialState} from "./appState/contactsStore";
-import {contactsReducer} from "./appState/contactsReducer";
-
+import  ContactsProvider  from "./appState/contactsContext";
 
 function App() {
   return (
-    <ContactsProvider reducer={contactsReducer} initialState={initialState}>
+    <ContactsProvider>
       <BrowserRouter>
       <Switch>
         <Route path={routes.HOME} exact><Home/></Route>
-        <Route path={routes.ADD} exact><Add/></Route>
+        <Route path={routes.ADD} exact component={Add}></Route>
         {/* NOTE: render Details screen using the component prop not as a child, react router v5 will have an undefined match prop if used as a child instead of a component prop */}
         <Route path={routes.DETAILS} exact component={Details}></Route>
         {/* <Route path={routes.EDIT} exact><Edit/></Route> */} 

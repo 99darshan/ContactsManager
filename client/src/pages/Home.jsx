@@ -9,7 +9,10 @@ import { Link } from "react-router-dom";
 import { ContactsContext } from "../appState/contactsContext";
 
 export default function Home(props) {
-  const [{ contacts }, dispatch] = useContext(ContactsContext);
+  const { state, dispatch } = useContext(ContactsContext);
+  const { contacts } = state;
+  console.log(state);
+  console.log(contacts);
   return (
     <React.Fragment>
       <NavBar
@@ -21,12 +24,13 @@ export default function Home(props) {
       />
 
       {contacts.map(item => (
+        //console.log(item)
         <ContactListItem
           key={item.id}
           id={item.id}
           avatar="https://i.pravatar.cc/300"
-          name={`${item.firstName} ${item.lastName}`}
-          phoneNumber={item.phoneNumber}
+          name={`${item.firstname} ${item.lastname}`}
+          phoneNumber={item.phonenumber}
         />
       ))}
       <FabButton navigateTo={routes.ADD} labelText="add" icon={<AddIcon />} />
