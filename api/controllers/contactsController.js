@@ -1,21 +1,25 @@
 //TODO: REMOVE contacts list
 const {pool} = require('../DAL/dbConfig');
+const contactsResponseMaker = require('../helpers/responseMaker');
+
+
 
 let contactsController = {
     getAllContacts: async (req, res,next)=>{
         try {
             const result = await pool.query(`SELECT * FROM contacts;`);
-            res.status(200).json(result.rows);
+            res.status(200).json(contactsResponseMaker.OK(req, result.rows));
         } catch (error) {
+            console.log(error.message);
             res.status(500).json(error);
         }
     },
-
     getContactById: async (req, res,next) => {
         try{
             const parsedId = parseInt(req.params.id);
             const result = await pool.query(`SELECT * FROM contacts where id=${parsedId}`);
             if(result.rows.length === 0) return res.status(404).json({message: `Contact with id ${parsedId} doesn't exist.`});
+            console.log(result.rows);
             res.status(200).json(result.rows);
         }catch(error){
             res.status(500).json(error);
@@ -35,14 +39,16 @@ let contactsController = {
                 company: req.body.company,
                 email: req.body.email,
                 phoneNumber: req.body.phoneNumber,
-                address: req.body.address
+                address: req.body.address,
+                birthday: req.body.birthday
             };
 
-            let insertScript = `INSERT INTO contacts (firstname,lastname,phonenumber,company,email,address) VALUES ('${newContact.firstName}', '${newContact.lastName}', '${newContact.phoneNumber}', '${newContact.company}', '${newContact.email}', '${newContact.address}');`;
+            let insertScript = `INSERT INTO contacts (first_name,last_name,phone_number,company,email,address,birthday) VALUES ('${newContact.firstName}', '${newContact.lastName}', '${newContact.phoneNumber}', '${newContact.company}', '${newContact.email}', '${newContact.address}', '${newContact.birthday}');`;
 
             console.log(insertScript);
             // TODO: validate and sanitize the req.body inputs, handle sql injection
             const result = await pool.query(insertScript);
+            console.table(result);
             //if(result.rows.length === 0) return res.stat TODO:
             //res.status(201).json(result.rows);
             res.sendStatus(201);

@@ -8,15 +8,16 @@
 CREATE TABLE contacts
 (
     id SERIAL PRIMARY KEY,
-    firstName VARCHAR NOT NULL,
-    lastName VARCHAR,
-    phoneNumber INT NOT NULL,
+    first_name VARCHAR NOT NULL,
+    last_name VARCHAR,
+    phone_number INT NOT NULL,
     company VARCHAR,
     email VARCHAR,
-    address VARCHAR
+    address VARCHAR,
+    birthday DATE
 );
 
 -- INSERT INTO contacts
---     (firstName,lastName,phoneNumber,company,email,address)
+--     (first_name,last_name,phone_number,company,email,address,birthday)
 -- VALUES
---     ('test', 'name', 123456789, 'aalu company', 'aalu@hawa.com', '123 street jupiter');
+--     ('test', 'name', 123456789, 'aalu company', 'aalu@hawa.com', '123 street jupiter', current_date);
