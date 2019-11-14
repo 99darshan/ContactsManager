@@ -46,6 +46,7 @@ export async function Get(url, dispatch){
 
 export async function Post(url, reqBody, dispatch){
     // TODO: try catch
+    console.log("POST.....")
     const response = await fetch(url,{
         method: 'POST',
         headers: {
@@ -53,10 +54,13 @@ export async function Post(url, reqBody, dispatch){
         },
         body: JSON.stringify(reqBody)
     });
+    const res = await response.json();
+    console.log('adding....')
+    console.log(res);
     dispatch({
         type:"ADD",
         payload:{
-            newContact: {...reqBody}
+            newContact: { ...res.values[0] }
         }
     })
 

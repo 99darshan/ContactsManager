@@ -34,27 +34,27 @@ let contactsController = {
         console.log(JSON.stringify(req.body));
         try {
             const newContact = {
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                company: req.body.company,
-                email: req.body.email,
+                firstName: req.body.firstName || '',
+                lastName: req.body.lastName || '',
+                company: req.body.company || '',
+                email: req.body.email || '',
                 phoneNumber: req.body.phoneNumber,
-                address: req.body.address,
+                address: req.body.address || '',
                 birthday: req.body.birthday || null
             };
             console.log(newContact);
             const parsedBirthday = newContact.birthday === null ? null :  `'${newContact.birthday}'`
             console.log(parsedBirthday);
 
-            let insertScript = `INSERT INTO contacts (first_name,last_name,phone_number,company,email,address,birthday) VALUES ('${newContact.firstName}', '${newContact.lastName}', '${newContact.phoneNumber}', '${newContact.company}', '${newContact.email}', '${newContact.address}', ${parsedBirthday});`;
+            let insertScript = `INSERT INTO contacts (first_name,last_name,phone_number,company,email,address,birthday) VALUES ('${newContact.firstName}', '${newContact.lastName}', '${newContact.phoneNumber}', '${newContact.company}', '${newContact.email}', '${newContact.address}', ${parsedBirthday}) RETURNING *;`;
 
             console.log(insertScript);
-            // TODO: validate and sanitize the req.body inputs, handle sql injection
+            
             const result = await pool.query(insertScript);
-            console.table(result);
+            //console.table(result);
+            console.log(result.rows);
             //if(result.rows.length === 0) return res.stat TODO:
-            //res.status(201).json(result.rows);
-            res.sendStatus(201);
+            res.status(201).json(contactsResponseMaker.OK(req, result.rows));
 
         } catch (error) {
             res.status(500).json(error);
