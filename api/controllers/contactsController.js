@@ -29,7 +29,7 @@ let contactsController = {
         //TODO: validate and sanitize input request body to handle sql injection
         // TODO: make sure app doesn't crash when client sends an unformatted JSON or an empty JSON in the request body, 
         // TODO: make sure undefined values are not being inserted as undefined string into database
-        // TODO: send the link to newly created resource in response header??
+        // TODO: send the link to newly created resource in response header?? and send error when required data are not received
         
         console.log(JSON.stringify(req.body));
         try {
@@ -40,10 +40,13 @@ let contactsController = {
                 email: req.body.email,
                 phoneNumber: req.body.phoneNumber,
                 address: req.body.address,
-                birthday: req.body.birthday
+                birthday: req.body.birthday || null
             };
+            console.log(newContact);
+            const parsedBirthday = newContact.birthday === null ? null :  `'${newContact.birthday}'`
+            console.log(parsedBirthday);
 
-            let insertScript = `INSERT INTO contacts (first_name,last_name,phone_number,company,email,address,birthday) VALUES ('${newContact.firstName}', '${newContact.lastName}', '${newContact.phoneNumber}', '${newContact.company}', '${newContact.email}', '${newContact.address}', '${newContact.birthday}');`;
+            let insertScript = `INSERT INTO contacts (first_name,last_name,phone_number,company,email,address,birthday) VALUES ('${newContact.firstName}', '${newContact.lastName}', '${newContact.phoneNumber}', '${newContact.company}', '${newContact.email}', '${newContact.address}', ${parsedBirthday});`;
 
             console.log(insertScript);
             // TODO: validate and sanitize the req.body inputs, handle sql injection

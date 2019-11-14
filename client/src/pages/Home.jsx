@@ -29,8 +29,8 @@ export default function Home(props) {
           key={item.id}
           id={item.id}
           avatar="https://i.pravatar.cc/300"
-          name={`${item.firstname} ${item.lastname}`}
-          phoneNumber={item.phonenumber}
+          name={`${item.firstName} ${item.lastName}`}
+          phoneNumber={item.phoneNumber}
         />
       ))}
       <FabButton navigateTo={routes.ADD} labelText="add" icon={<AddIcon />} />

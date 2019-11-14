@@ -14,6 +14,7 @@ import {
 } from "@material-ui/icons";
 import { TextField, InputAdornment, IconButton, Fab } from "@material-ui/core";
 import { ContactsContext } from "../appState/contactsContext";
+import { Post } from "../services/httpService";
 
 export default function ContactTextFields(props) {
   const { state, dispatch } = useContext(ContactsContext);
@@ -153,17 +154,32 @@ export default function ContactTextFields(props) {
             <RaisedButton
               label="Save"
               startIcon={<Save />}
-              onClick={() => {
+              onClick={async () => {
                 console.log("Saved on Edit or Add .");
-                dispatch({
-                  type: props.saveActionType, // should be either "ADD" or "EDIT"
-                  payload: {
-                    id: Math.floor(Math.random() * 100) + 1,
+                // TODO: validate for required fields and phoneNumber to be a number field
+                if (props.saveActionType === "ADD") {
+                  let newContact = {
+                    //id: Math.floor(Math.random() * 100) + 1, // AUto updates on server
                     firstName: firstNameValue,
                     lastName: lastNameValue,
-                    phoneNumber: phoneNumberValue
-                  }
-                });
+                    phoneNumber: parseInt(phoneNumberValue) // TODO: validate to make sure parsing doesn't fail
+                  };
+                  await Post(
+                    "http://localhost:5000/contacts",
+                    newContact,
+                    dispatch
+                  );
+                }
+
+                // dispatch({
+                //   type: props.saveActionType, // should be either "ADD" or "EDIT"
+                //   payload: {
+                //     id: Math.floor(Math.random() * 100) + 1,
+                //     firstName: firstNameValue,
+                //     lastName: lastNameValue,
+                //     phoneNumber: parseInt(phoneNumberValue)
+                //   }
+                // });
                 props.routeHistory.goBack();
               }}
             />

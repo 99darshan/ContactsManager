@@ -7,6 +7,7 @@ const contactsResponseMaker = {
         let responseJson = {
             href: req.path,
             values: results.map(item => ({
+              id: item.id,
               firstName: item.first_name || "",
               lastName: item.last_name || "",
               phoneNumber: item.phone_number || "",
