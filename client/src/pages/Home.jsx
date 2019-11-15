@@ -3,6 +3,7 @@ import NavBar from "../components/NavBar";
 import FabButton from "../components/FabButton";
 import ContactListItem from "../components/ContactListItem";
 import { Menu, Add as AddIcon } from "@material-ui/icons";
+import { Button } from "@material-ui/core";
 //import contacts from "../MockData/contactsData";
 import * as routes from "../constants/routeConstants";
 import { Link } from "react-router-dom";
@@ -17,10 +18,13 @@ export default function Home(props) {
     <React.Fragment>
       <NavBar
         title="Contacts Manager"
-        actionButtonText="Log in"
         leadingIcon={<Menu />}
-        screen="home"
         navigateTo="/"
+        actionButtons={[
+          <Button key="loginButton" color="inherit">
+            Log In
+          </Button>
+        ]}
       />
 
       {contacts.map(item => (
@@ -29,8 +33,7 @@ export default function Home(props) {
           key={item.id}
           id={item.id}
           avatar="https://i.pravatar.cc/300"
-          name={`${item.firstName} ${item.lastName}`}
-          phoneNumber={item.phoneNumber}
+          contact={item}
         />
       ))}
       <FabButton navigateTo={routes.ADD} labelText="add" icon={<AddIcon />} />

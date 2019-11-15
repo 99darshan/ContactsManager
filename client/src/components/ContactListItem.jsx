@@ -11,13 +11,14 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Star, Edit } from "@material-ui/icons";
 import { DETAILS } from "../constants/routeConstants";
+import { EDIT } from "../constants/routeConstants";
 
 export default function ContactListItem(props) {
   return (
     <React.Fragment>
       <ListItem
         component={Link}
-        to={DETAILS.replace(":id", props.id)}
+        to={DETAILS.replace(":id", props.contact.id)}
         alignItems="flex-start"
         button
         divider
@@ -27,10 +28,16 @@ export default function ContactListItem(props) {
         }}
       >
         <ListItemAvatar>
-          <Avatar alt={props.name} src={props.avatar} />
+          <Avatar
+            alt={`${props.contact.firstName} ${props.contact.lastName}`}
+            src={props.avatar}
+          />
         </ListItemAvatar>
 
-        <ListItemText primary={props.name} secondary={props.phoneNumber} />
+        <ListItemText
+          primary={`${props.contact.firstName} ${props.contact.lastName}`}
+          secondary={props.contact.phoneNumber}
+        />
         <ListItemSecondaryAction>
           <IconButton
             edge="end"
@@ -42,6 +49,8 @@ export default function ContactListItem(props) {
             <Star />
           </IconButton>
           <IconButton
+            component={Link}
+            to={EDIT.replace(":id", props.contact.id)}
             edge="end"
             aria-label="edit"
             onClick={() => {
@@ -58,6 +67,5 @@ export default function ContactListItem(props) {
 
 ContactListItem.propTypes = {
   avatar: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  phoneNumber: PropTypes.string
+  contact: PropTypes.object.isRequired
 };

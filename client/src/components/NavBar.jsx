@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
   },
-  actionButton: {
+  marginRight: {
     marginRight: theme.spacing(2)
   },
   title: {
@@ -37,7 +37,7 @@ export default function NavBar(props) {
           component={Link}
           to={props.navigateTo}
           edge="start"
-          className={classes.actionButton}
+          className={classes.marginRight}
           color="inherit"
           aria-label="menu"
           onClick={props.leadingButtonClick}
@@ -47,37 +47,7 @@ export default function NavBar(props) {
         <Typography variant="h6" className={classes.title}>
           {props.title}
         </Typography>
-        {props.screen === "home" && (
-          <Button color="inherit">{props.actionButtonText}</Button>
-        )}
-        {props.screen === "details" && (
-          <React.Fragment>
-            <IconButton
-              onClick={() => {
-                console.log("favorite clicked");
-              }}
-              edge="start"
-              className={classes.actionButton}
-              color="inherit"
-              aria-label="favorite"
-            >
-              {/* TODO: toogle icon to border and filled for favorite on click, if already favorited show filled icon */}
-              <FavoriteBorder />
-            </IconButton>
-
-            <IconButton
-              onClick={() => {
-                console.log("delete clicked");
-              }}
-              edge="start"
-              className={classes.actionButton}
-              color="inherit"
-              aria-label="menu"
-            >
-              <DeleteForeverRounded />
-            </IconButton>
-          </React.Fragment>
-        )}
+        {props.actionButtons && props.actionButtons.map(button => button)}
       </Toolbar>
     </AppBar>
   );
@@ -87,7 +57,6 @@ NavBar.propType = {
   leadingIcon: PropTypes.element,
   navigateTo: PropTypes.string,
   title: PropTypes.string,
-  actionButtonText: PropTypes.string,
   leadinButtonClick: PropTypes.func,
-  screen: PropTypes.oneOf(["home", "add", "details"]).isRequired
+  actionButtons: PropTypes.array
 };

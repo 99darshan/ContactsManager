@@ -1,67 +1,143 @@
+import {ERROR} from '../appState/contactsActionTypes';
 /**
- * 
- * @param {string} url 
- * @param {any} dispatch 
- * receives an url and a dispatch object
- * makes http requests and dispatches an action to update the existing state once the request completes
+ *
+ * @param {string} url
+ * @param {any} dispatch
+ * @param {string} actionType
+ * receives an url and a dispatch object and a action type
+ * makes http Get requests and dispatches action to update the existing state once the request completes
  */
-export async function Get(url, dispatch){
-    try {
-        // TODO: port to base url, what if status code other than 200 or 500
-        //let response = await fetch('http://localhost:5000/contacts');
-        let response = await fetch(url);
-        if(response.status ===  200)
-        {
-            let res = await response.json();
-            dispatch({
-              type: "FETCH_ALL_CONTACTS",
-              payload: {contacts: res.values, isFetching: false}
-            });
-            
-        }
-
-        if(response.status === 500)
-        {
-            // TODO: determine how error is returned from API 
-            let res = await response.json();
-            dispatch({
-                type:"ERROR",
-                payload:{isFetching: false, hasError: true, error: res} 
-            })
-        }
-        
-        //initialState = {...initialState, contacts:[...res], isFetching:false}
-        //console.table(res);
-        //console.table(initialState);
-        
-    } catch (error) {
-        console.log(error.message);
-        dispatch({
-            type:"ERROR",
-            payload:{message: "Error Fetching Data From The Api"}
-        })
+// TODO: send successActionType and FailureActionType makes this service modular and can be used by any other context
+async function GET(url, dispatch, actionType) {
+  try {
+    let response = await fetch(url);
+    if (response.status === 200) {
+      let res = await response.json();
+      dispatch({
+        type: actionType,
+        payload: { values: res.values }
+      });
+    } else {
+      let res = await response.json();
+      dispatch({
+        type: ERROR,
+        payload: { error: res.error }
+      });
     }
-};
-
-
-export async function Post(url, reqBody, dispatch){
-    // TODO: try catch
-    console.log("POST.....")
-    const response = await fetch(url,{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(reqBody)
-    });
-    const res = await response.json();
-    console.log('adding....')
-    console.log(res);
+  } catch (error) {
+    console.log(error.message);
     dispatch({
-        type:"ADD",
-        payload:{
-            newContact: { ...res.values[0] }
-        }
-    })
-
+      type: ERROR,
+      payload: { error }
+    });
+  }
 }
+
+async function POST(url, reqBody, dispatch, actionType) {
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(reqBody)
+    });
+    console.log('post status:' +  response.status);
+    if (response.status === 200 || response.status === 201) {
+      const res = await response.json();
+      dispatch({
+        type: actionType,
+        payload: { values: res.values }
+      });
+    } else {
+      let res = await response.json();
+
+      dispatch({
+        type: ERROR,
+        payload: { error: res.error }
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: ERROR,
+      payload: { error }
+    });
+  }
+}
+
+async function PUT(url, reqBody, dispatch, actionType) {
+  try {
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(reqBody)
+    });
+    if (response.status === 200 || response.status === 201) {
+      const res = await response.json();
+      console.log(res);
+      dispatch({
+        type: actionType,
+        payload: {
+          values: res.values,
+        }
+      });
+    } else {
+      let res = await response.json();
+
+      dispatch({
+        type: ERROR,
+        payload: { error: res.error }
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: ERROR,
+      payload: { error }
+    });
+  }
+}
+
+async function DELETE(url, dispatch, actionType, deleteResourceId) {
+  console.log(deleteResourceId);
+  try {
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    if (response.status === 200) {
+      let res = await response.json();
+      dispatch({
+        type: actionType,
+        payload: {
+          deleteResourceId: deleteResourceId,
+          values: res.values
+        }
+      });
+    } else {
+      let res = await response.json();
+      dispatch({
+        type: ERROR,
+        payload: { error: res.error }
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: ERROR,
+      payload: { error }
+    });
+  }
+}
+
+const httpService = {
+    GET,
+    POST,
+    PUT,
+    DELETE
+}
+
+export default httpService;
+

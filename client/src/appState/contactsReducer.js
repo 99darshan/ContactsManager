@@ -1,27 +1,73 @@
-export const contactsReducer = (state, action) =>{
-    switch(action.type){
-        case 'ADD':
-            return {...state, contacts:[...state.contacts, action.payload.newContact]}
-        
-        //case 'EDIT':
-            //updateContact(action.payload);
-        case 'FETCH_ALL_CONTACTS':    
-            return  {...state, contacts:[ ...action.payload.contacts], isFetching: action.payload.isFetching}
-        default:
-            return state;
-    }
-}
+import * as actionTypes from "./contactsActionTypes";
+import { Satellite, Flare } from "@material-ui/icons";
 
-// ADD action should not call create contact, it should be called from save button click and on sucess the ADD action should be triggered to update the global state; same goes for the update
-// TODO: export to services, on error dispatch error action, set loading and not loading state
-async function createContact(contact){
-    const response = await fetch('http://localhost:5000/contacts',{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(contact)
-    })
-    console.log(response.status);
-    console.log(response);
-}
+export const contactsReducer = (state, action) => {
+  switch (action.type) {
+    case actionTypes.FETCHING:
+      return { ...state, isFetching: true };
+
+    // NOTE: ALL sucess action would reset the isFetching and hasError state to false and reset the error object to blank
+    case actionTypes.FETCH_ALL_CONTACTS_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        hasError: false,
+        contacts: [...action.payload.values],
+        error: {}
+      };
+
+    case actionTypes.CREATE_CONTACT_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        hasError: false,
+        error:{},
+        contacts: [...state.contacts, ...action.payload.values]
+      };
+
+    case actionTypes.UPDATE_CONTACT_SUCCESS:
+      if (action.payload.values.length > 0) {
+        const updatedContact = action.payload.values[0];
+        const updatedIndex = state.contacts.findIndex(
+          contact => contact.id === updatedContact.id
+        );
+        let newContactsState = [...state.contacts];
+        newContactsState.splice(updatedIndex, 1, updatedContact);
+        return {
+          ...state,
+          isFetching: false,
+          hasError: false,
+          error: {},
+          contacts: [...newContactsState]
+        };
+      }
+      return { ...state, isFetching: false, hasError: false, error: {} };
+
+    case actionTypes.GET_CONTACT_DETAILS_SUCCESS:
+      break;
+
+    case actionTypes.DELETE_CONTACT_SUCCESS:
+      console.log(action.payload.deleteResourceId);
+      let contactsState = [...state.contacts];
+      const deletedIndex = contactsState.findIndex(
+        contact => contact.id === action.payload.deleteResourceId
+      );
+      console.log(deletedIndex);
+      if (deletedIndex !== -1) {
+        contactsState.splice(deletedIndex, 1);
+        return {
+          ...state,
+          contacts: [...contactsState],
+          isFetching: false,
+          hasError: false,
+          error: {}
+        };
+      }
+      return { ...state, isFetching: false, hasError: false, error: {} };
+
+    // case actionTypes.ERROR_FETCHING_DATA:
+    //     break;
+    case actionTypes.ERROR:
+      break;
+  }
+};

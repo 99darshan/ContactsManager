@@ -14,7 +14,13 @@ import {
 } from "@material-ui/icons";
 import { TextField, InputAdornment, IconButton, Fab } from "@material-ui/core";
 import { ContactsContext } from "../appState/contactsContext";
-import { Post } from "../services/httpService";
+import httpService from "../services/httpService";
+import {
+  CREATE_CONTACT_SUCCESS,
+  UPDATE_CONTACT_SUCCESS,
+  DELETE_CONTACT_SUCCESS
+} from "../appState/contactsActionTypes";
+import { API_BASE_URL } from "../constants/routeConstants";
 
 export default function ContactTextFields(props) {
   const { state, dispatch } = useContext(ContactsContext);
@@ -157,29 +163,26 @@ export default function ContactTextFields(props) {
               onClick={async () => {
                 console.log("Saved on Edit or Add .");
                 // TODO: validate for required fields and phoneNumber to be a number field
+                let newContact = {
+                  firstName: firstNameValue,
+                  lastName: lastNameValue,
+                  phoneNumber: parseInt(phoneNumberValue) // TODO: validate to make sure parsing doesn't fail
+                };
                 if (props.saveActionType === "ADD") {
-                  let newContact = {
-                    //id: Math.floor(Math.random() * 100) + 1, // AUto updates on server
-                    firstName: firstNameValue,
-                    lastName: lastNameValue,
-                    phoneNumber: parseInt(phoneNumberValue) // TODO: validate to make sure parsing doesn't fail
-                  };
-                  await Post(
-                    "http://localhost:5000/contacts",
+                  httpService.POST(
+                    `${API_BASE_URL}/contacts`,
                     newContact,
-                    dispatch
+                    dispatch,
+                    CREATE_CONTACT_SUCCESS
+                  );
+                } else {
+                  httpService.PUT(
+                    `${API_BASE_URL}/contacts/${props.contact.id}`,
+                    newContact,
+                    dispatch,
+                    UPDATE_CONTACT_SUCCESS
                   );
                 }
-
-                // dispatch({
-                //   type: props.saveActionType, // should be either "ADD" or "EDIT"
-                //   payload: {
-                //     id: Math.floor(Math.random() * 100) + 1,
-                //     firstName: firstNameValue,
-                //     lastName: lastNameValue,
-                //     phoneNumber: parseInt(phoneNumberValue)
-                //   }
-                // });
                 props.routeHistory.goBack();
               }}
             />
