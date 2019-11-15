@@ -30,6 +30,7 @@ export default function Details(props) {
       edge="start"
       color="inherit"
       aria-label="favorite"
+      style={{ marginRight: "1rem" }}
     >
       <FavoriteBorder />
     </IconButton>

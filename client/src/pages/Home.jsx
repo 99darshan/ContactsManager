@@ -26,16 +26,31 @@ export default function Home(props) {
           </Button>
         ]}
       />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center"
+        }}
+      >
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "800px"
+          }}
+        >
+          {contacts.map(item => (
+            //console.log(item)
+            <ContactListItem
+              key={item.id}
+              id={item.id}
+              avatar="https://i.pravatar.cc/300"
+              contact={item}
+            />
+          ))}
+        </div>
+      </div>
 
-      {contacts.map(item => (
-        //console.log(item)
-        <ContactListItem
-          key={item.id}
-          id={item.id}
-          avatar="https://i.pravatar.cc/300"
-          contact={item}
-        />
-      ))}
       <FabButton navigateTo={routes.ADD} labelText="add" icon={<AddIcon />} />
     </React.Fragment>
   );

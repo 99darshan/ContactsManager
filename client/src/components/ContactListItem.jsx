@@ -19,7 +19,7 @@ export default function ContactListItem(props) {
       <ListItem
         component={Link}
         to={DETAILS.replace(":id", props.contact.id)}
-        alignItems="flex-start"
+        alignItems="center"
         button
         divider
         ContainerComponent="div"
