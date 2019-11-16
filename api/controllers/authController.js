@@ -38,7 +38,7 @@ let authController = {
         `https://graph.facebook.com/${userId}?fields=name,email,picture&access_token=${accessToken}`
       );
       let userRes = await userResponse.json();
-      // validate if the userId from response is same as the userId passed in request
+      // validate if the userId from response of facebook graph api server is same as the userId passed in the request
       if (userId === userRes.id) {
         // check if the user exists in our database
         const selectQuery = {

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import NavBar from "../components/NavBar";
 import FabButton from "../components/FabButton";
 import ContactListItem from "../components/ContactListItem";
@@ -8,12 +8,26 @@ import * as routes from "../constants/routeConstants";
 import { Link } from "react-router-dom";
 import { ContactsContext } from "../appState/contactsContext";
 import { CONTACTS } from "../constants/routeConstants";
+import {
+  FETCHING,
+  FETCH_ALL_CONTACTS_SUCCESS
+} from "../appState/contactsActionTypes";
+import httpService from "../services/httpService";
 
 export default function Contacts(props) {
   const { state, dispatch } = useContext(ContactsContext);
   const { contacts } = state;
   console.log(state);
   console.log(contacts);
+  // TODO: fetch all contacts for only the logged in user when Contacts component mounts
+  useEffect(() => {
+    dispatch({ type: FETCHING });
+    httpService.GET(
+      `${routes.API_BASE_URL}/contacts`,
+      dispatch,
+      FETCH_ALL_CONTACTS_SUCCESS
+    );
+  }, []);
   return (
     <React.Fragment>
       <NavBar

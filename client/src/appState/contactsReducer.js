@@ -1,5 +1,4 @@
 import * as actionTypes from "./contactsActionTypes";
-import { Satellite, Flare } from "@material-ui/icons";
 
 export const contactsReducer = (state, action) => {
   switch (action.type) {
@@ -67,7 +66,8 @@ export const contactsReducer = (state, action) => {
 
     // case actionTypes.ERROR_FETCHING_DATA:
     //     break;
-    case actionTypes.ERROR:
+    case actionTypes.ERROR: 
+      //TODO:
       break;
   }
 };

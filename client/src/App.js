@@ -8,10 +8,13 @@ import Home from "./pages/Home";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import * as routes from "./constants/routeConstants";
 import ContactsProvider from "./appState/contactsContext";
+import AuthProvider from "./appState/authContext";
 import PrivateRoute from "./components/PrivateRoute";
+
 
 function App() {
   return (
+    <AuthProvider>
     <ContactsProvider>
       <BrowserRouter>
         <Switch>
@@ -29,6 +32,7 @@ function App() {
         </Switch>
       </BrowserRouter>
     </ContactsProvider>
+    </AuthProvider>
   );
 }
 

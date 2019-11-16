@@ -14,11 +14,13 @@ export default function ContactsProvider(props){
     let [state, dispatch] = useReducer(contactsReducer, initialContactState); 
 
     // second empty [] makes this effect behave as componentDidMount else it will also be called on componentDidUpdate and fetching data from api in every request.
-    useEffect(() => {        
-        dispatch({type:FETCHING});
-        httpService.GET(`${API_BASE_URL}/contacts`, dispatch, FETCH_ALL_CONTACTS_SUCCESS);
+    // shouldn't call fetching of all contacts when the  contacts provider component mount
+    // this is moved to the component that is rendered on /contacts route
+    // useEffect(() => {        
+    //     dispatch({type:FETCHING});
+    //     httpService.GET(`${API_BASE_URL}/contacts`, dispatch, FETCH_ALL_CONTACTS_SUCCESS);
 
-      }, []);
+    //   }, []);
 
     return (<ContactsContext.Provider value={{state, dispatch}}>
         {props.children}
