@@ -1,57 +1,9 @@
-import React, { useContext } from "react";
-import NavBar from "../components/NavBar";
-import FabButton from "../components/FabButton";
-import ContactListItem from "../components/ContactListItem";
-import { Menu, Add as AddIcon } from "@material-ui/icons";
-import { Button } from "@material-ui/core";
-//import contacts from "../MockData/contactsData";
-import * as routes from "../constants/routeConstants";
-import { Link } from "react-router-dom";
-import { ContactsContext } from "../appState/contactsContext";
+import React from "react";
 
-export default function Home(props) {
-  const { state, dispatch } = useContext(ContactsContext);
-  const { contacts } = state;
-  console.log(state);
-  console.log(contacts);
+export default function Home() {
   return (
-    <React.Fragment>
-      <NavBar
-        title="Contacts Manager"
-        leadingIcon={<Menu />}
-        navigateTo="/"
-        actionButtons={[
-          <Button key="loginButton" color="inherit">
-            Log In
-          </Button>
-        ]}
-      />
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center"
-        }}
-      >
-        <div
-          style={{
-            width: "100%",
-            maxWidth: "800px"
-          }}
-        >
-          {contacts.map(item => (
-            //console.log(item)
-            <ContactListItem
-              key={item.id}
-              id={item.id}
-              avatar="https://i.pravatar.cc/300"
-              contact={item}
-            />
-          ))}
-        </div>
-      </div>
-
-      <FabButton navigateTo={routes.ADD} labelText="add" icon={<AddIcon />} />
-    </React.Fragment>
+    <>
+      <h1>Welcome to contacts manager, Public Home page</h1>
+    </>
   );
 }

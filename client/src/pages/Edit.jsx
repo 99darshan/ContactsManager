@@ -3,6 +3,7 @@ import NavBar from "../components/NavBar";
 import ContactTextFields from "../components/ContactTextFields";
 import { Close } from "@material-ui/icons";
 import { ContactsContext } from "../appState/contactsContext";
+import { CONTACTS } from "../constants/routeConstants";
 
 export default function Edit(props) {
   let { state, dispatch } = useContext(ContactsContext);
@@ -12,7 +13,7 @@ export default function Edit(props) {
 
   return (
     <React.Fragment>
-      <NavBar leadingIcon={<Close />} title="Edit" navigateTo="/" />
+      <NavBar leadingIcon={<Close />} title="Edit" navigateTo={CONTACTS} />
 
       <ContactTextFields
         contact={currentContact}

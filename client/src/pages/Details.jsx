@@ -9,12 +9,11 @@ import { IconButton } from "@material-ui/core";
 import NavBar from "../components/NavBar";
 import FabButton from "../components/FabButton";
 import ContactTextFields from "../components/ContactTextFields";
-import { EDIT, API_BASE_URL } from "../constants/routeConstants";
+import { EDIT, API_BASE_URL, CONTACTS } from "../constants/routeConstants";
 import { ContactsContext } from "../appState/contactsContext";
 import { DELETE_CONTACT_SUCCESS } from "../appState/contactsActionTypes";
 import httpService from "../services/httpService";
 import { Link } from "react-router-dom";
-
 export default function Details(props) {
   let { state, dispatch } = useContext(ContactsContext);
   const { match } = props;
@@ -39,7 +38,7 @@ export default function Details(props) {
   const deleteActionButton = (
     <IconButton
       component={Link}
-      to="/"
+      to={CONTACTS}
       key="delete-button"
       onClick={async () => {
         httpService.DELETE(
@@ -61,7 +60,7 @@ export default function Details(props) {
     <React.Fragment>
       <NavBar
         leadingIcon={<ArrowBack />}
-        navigateTo="/"
+        navigateTo={CONTACTS}
         actionButtons={[favoriteActionButton, deleteActionButton]}
       />
       <FabButton

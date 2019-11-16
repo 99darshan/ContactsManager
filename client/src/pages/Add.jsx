@@ -2,6 +2,7 @@ import React from "react";
 import NavBar from "../components/NavBar";
 import ContactTextFields from "../components/ContactTextFields";
 import { Close } from "@material-ui/icons";
+import { CONTACTS } from "../constants/routeConstants";
 
 export default function Add(props) {
   return (
@@ -10,7 +11,7 @@ export default function Add(props) {
         title="Add Contact"
         leadingIcon={<Close />}
         screen="add"
-        navigateTo="/"
+        navigateTo={CONTACTS}
       />
 
       <ContactTextFields
