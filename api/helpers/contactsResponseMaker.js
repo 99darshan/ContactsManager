@@ -7,7 +7,7 @@ const contactsResponseMaker = {
     let responseJson = {
       self: req.path,
       values: results.map(item => ({
-        self: `${req.path}/${item.id}`,
+        //self: `${req.path}/${item.id}`,
         id: item.id,
         firstName: item.first_name || "",
         lastName: item.last_name || "",

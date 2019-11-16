@@ -17,6 +17,15 @@ CREATE TABLE contacts
     birthday DATE
 );
 
+CREATE TABLE users
+(
+    id SERIAL PRIMARY KEY,
+    facebook_id BIGINT not null,
+    name varchar,
+    email varchar,
+    profile_picture varchar
+);
+
 -- INSERT INTO contacts
 --     (first_name,last_name,phone_number,company,email,address,birthday)
 -- VALUES

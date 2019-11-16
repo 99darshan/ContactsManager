@@ -1,6 +1,6 @@
 //TODO: REMOVE contacts list
-const { pool } = require("../DAL/dbConfig");
-const contactsResponseMaker = require("../helpers/responseMaker");
+const { pool } = require("../configs/dbConfig");
+const contactsResponseMaker = require("../helpers/contactsResponseMaker");
 
 let contactsController = {
   getAllContacts: async (req, res, next) => {
