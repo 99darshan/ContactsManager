@@ -44,6 +44,7 @@ export default function ContactListItem(props) {
             aria-label="favorite"
             onClick={() => {
               console.log("favorite clicked");
+              // make put request to update the favorite contacts
             }}
           >
             <Star />

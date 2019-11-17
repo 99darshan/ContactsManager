@@ -21,7 +21,6 @@ import {
   DELETE_CONTACT_SUCCESS
 } from "../appState/contactsActionTypes";
 import { API_BASE_URL } from "../constants/routeConstants";
-
 export default function ContactTextFields(props) {
   const { state, dispatch } = useContext(ContactsContext);
   const { hasError, errors, contacts } = state;
@@ -35,6 +34,18 @@ export default function ContactTextFields(props) {
   let [phoneNumberValue, setPhoneNumberValue] = useState(
     props.contact ? props.contact.phoneNumber : ""
   );
+  let [emailValue, setEmailValue] = useState(
+    props.contact ? props.contact.email : ""
+  );
+  let [companyValue, setCompanyValue] = useState(
+    props.contact ? props.contact.company : ""
+  );
+  let [addressValue, setAddressValue] = useState(
+    props.contact ? props.contact.address : ""
+  );
+  let [birthdayValue, setBirthdayValue] = useState(
+    props.contact ? props.contact.birthday : ""
+  );
 
   return (
     <div
@@ -43,7 +54,8 @@ export default function ContactTextFields(props) {
         flexDirection: "row",
         justifyContent: "center",
         border: "1px solid  red",
-        marginTop: "2rem"
+        marginTop: "2rem",
+        marginBottom: "1rem"
       }}
     >
       <div
@@ -85,6 +97,8 @@ export default function ContactTextFields(props) {
             onChange={e => {
               setFirstNameValue(e.target.value);
             }}
+            error={!firstNameValue}
+            helperText={!firstNameValue ? "First Name Is Required !!" : ""}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -126,6 +140,12 @@ export default function ContactTextFields(props) {
             onChange={e => {
               setPhoneNumberValue(e.target.value);
             }}
+            error={!new RegExp("^[0-9]+$").test(phoneNumberValue)}
+            helperText={
+              !new RegExp("^[0-9]+$").test(phoneNumberValue)
+                ? "Phone number is required and should be numeric."
+                : ""
+            }
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -146,6 +166,77 @@ export default function ContactTextFields(props) {
               )
             }}
           />
+          <TextField
+            style={{ marginTop: "1rem" }}
+            value={emailValue}
+            disabled={props.isReadOnly}
+            fullWidth
+            id="email"
+            label="Email"
+            type="email"
+            variant="outlined"
+            onChange={e => {
+              setEmailValue(e.target.value);
+              console.log(emailValue);
+            }}
+            error={emailValue ? !/\S+@\S+\.\S+/.test(emailValue) : false}
+            helperText={
+              emailValue
+                ? !/\S+@\S+\.\S+/.test(emailValue)
+                  ? "Invalid Email"
+                  : ""
+                : ""
+            }
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Email />
+                </InputAdornment>
+              )
+            }}
+          />
+
+          <TextField
+            style={{ marginTop: "1rem" }}
+            value={companyValue}
+            disabled={props.isReadOnly}
+            fullWidth
+            id="company"
+            label="Company"
+            type="search"
+            variant="outlined"
+            onChange={e => {
+              setCompanyValue(e.target.value);
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Business />
+                </InputAdornment>
+              )
+            }}
+          />
+          <TextField
+            style={{ marginTop: "1rem" }}
+            value={addressValue}
+            disabled={props.isReadOnly}
+            fullWidth
+            id="address"
+            label="Address"
+            type="search"
+            variant="outlined"
+            onChange={e => {
+              setAddressValue(e.target.value);
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Room />
+                </InputAdornment>
+              )
+            }}
+          />
+          {/* TOOD: Add Birthday date picker */}
         </div>
         {!props.isReadOnly && (
           <div
@@ -163,10 +254,22 @@ export default function ContactTextFields(props) {
               onClick={async () => {
                 console.log("Saved on Edit or Add .");
                 // TODO: validate for required fields and phoneNumber to be a number field
+                // firstname is required and phone number should be numeric
+                if (
+                  !firstNameValue ||
+                  !new RegExp("^[0-9]+$").test(phoneNumberValue) ||
+                  (emailValue && !/\S+@\S+\.\S+/.test(emailValue))
+                ) {
+                  console.log("invalid save items");
+                  return;
+                }
                 let newContact = {
                   firstName: firstNameValue,
                   lastName: lastNameValue,
-                  phoneNumber: parseInt(phoneNumberValue) // TODO: validate to make sure parsing doesn't fail
+                  phoneNumber: parseInt(phoneNumberValue),
+                  email: emailValue,
+                  company: companyValue,
+                  address: addressValue
                 };
                 if (props.saveActionType === "ADD") {
                   await httpService.POST(
@@ -175,12 +278,7 @@ export default function ContactTextFields(props) {
                     dispatch,
                     CREATE_CONTACT_SUCCESS
                   );
-
-                  console.log("hasError in save..." + hasError);
-                  if (!hasError) {
-                    console.log("redirect hasError in save..." + hasError);
-                    //props.routeHistory.goBack();
-                  }
+                  props.routeHistory.goBack();
                 } else {
                   await httpService.PUT(
                     `${API_BASE_URL}/contacts/${props.contact.id}`,
@@ -188,14 +286,8 @@ export default function ContactTextFields(props) {
                     dispatch,
                     UPDATE_CONTACT_SUCCESS
                   );
+                  props.routeHistory.goBack();
                 }
-                // setTimeout(()=>{
-                //   console.log("hasError in save..." + hasError);
-                //   if (!hasError) {
-                //     console.log("hasError in save..." + hasError);
-                //     props.routeHistory.goBack();
-                //   }
-                // },5000);
               }}
             />
             <div style={{ marginRight: "1rem" }} />

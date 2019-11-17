@@ -1,4 +1,3 @@
-//TODO: REMOVE contacts list
 const { pool } = require("../configs/dbConfig");
 const contactsResponseMaker = require("../helpers/contactsResponseMaker");
 
@@ -51,20 +50,14 @@ let contactsController = {
   createContact: async (req, res, next) => {
     console.log(JSON.stringify(req.body));
     try {
-      // NOTE: BUG TODO: !req.body.phoneNumber would consider 0 as empty as well
-      if (!req.body.firstName || !req.body.phoneNumber)
+      console.log('firstname: ' + req.body.firstName);
+      console.log(!req.body.firstName);
+      // NOTE:  !req.body.phoneNumber would consider 0 as empty as well
+      if (!req.body.firstName || !new RegExp("^[0-9]+$").test(req.body.phoneNumber))
         return res.status(400).json(
           contactsResponseMaker.error(req, {
             message:
-              "Invalid Request!! firstName and phoneNumber should be present in the request body."
-          })
-        );
-
-      if (!new RegExp("^[0-9]+$").test(req.body.phoneNumber))
-        return res.status(400).json(
-          contactsResponseMaker.error(req, {
-            message:
-              "Invalid Request!! Phone number should only contain numbers."
+              "Invalid Request!! firstName and a valid numeric phoneNumber should be present in the request body."
           })
         );
 
@@ -151,6 +144,14 @@ let contactsController = {
           })
         );
       }
+
+      if (!req.body.firstName || !new RegExp("^[0-9]+$").test(req.body.phoneNumber))
+      return res.status(400).json(
+        contactsResponseMaker.error(req, {
+          message:
+            "Invalid Request!! firstName and a valid numeric phoneNumber should be present in the request body."
+        })
+      );
 
       const parsedId = parseInt(req.params.id);
 
