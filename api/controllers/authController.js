@@ -62,10 +62,9 @@ let authController = {
           };
           const createResult = await pool.query(insertQuery);
           console.log(createResult.rows);
-          // TODO: expirty of token
           let token = await jwt.sign(
             { user: createResult.rows[0] },
-            process.env.JWT_SECRET
+            process.env.JWT_SECRET, { expiresIn: '2h' }
           );
           return res.status(201).json({
             self: req.path,
@@ -83,7 +82,8 @@ let authController = {
           // first row gives the user
           let token = await jwt.sign(
             { user: selectResult.rows[0] },
-            process.env.JWT_SECRET
+            process.env.JWT_SECRET,
+            { expiresIn: '2h' }
           );
           return res.status(200).json({
             self: req.path,
