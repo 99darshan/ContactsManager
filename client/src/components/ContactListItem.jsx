@@ -10,9 +10,7 @@ import {
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Star, StarBorder, Edit } from "@material-ui/icons";
-import { DETAILS, API_BASE_URL, EDIT } from "../constants/routeConstants";
-import httpService from "../services/httpService";
-import { UPDATE_CONTACT_SUCCESS } from "../appState/contactsActionTypes";
+import { DETAILS, EDIT } from "../constants/routeConstants";
 export default function ContactListItem(props) {
   return (
     <React.Fragment>

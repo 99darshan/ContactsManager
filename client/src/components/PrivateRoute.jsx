@@ -10,7 +10,7 @@ import { AuthContext } from "../appState/authContext";
  * else redirects to the public Homepage
  */
 const PrivateRoute = props => {
-  const { authState, dispatch } = useContext(AuthContext);
+  const { authState } = useContext(AuthContext);
   const Component = props.component;
   console.log("private route: " + authState.isLoggedIn);
   return (

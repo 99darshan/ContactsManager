@@ -3,9 +3,8 @@ import NavBar from "../components/NavBar";
 import FabButton from "../components/FabButton";
 import ContactListItem from "../components/ContactListItem";
 import { Menu as MenuIcon, Add as AddIcon } from "@material-ui/icons";
-import { Button, Avatar, Menu, MenuItem, TextField } from "@material-ui/core";
+import { Avatar, Menu, MenuItem } from "@material-ui/core";
 import * as routes from "../constants/routeConstants";
-import { Link } from "react-router-dom";
 import { ContactsContext } from "../appState/contactsContext";
 import { AuthContext } from "../appState/authContext";
 import { CONTACTS, API_BASE_URL } from "../constants/routeConstants";
@@ -21,8 +20,8 @@ export default function Contacts(props) {
   const { state, dispatch } = useContext(ContactsContext);
   const { authState, authDispatch } = useContext(AuthContext);
   const { contacts, hasError, error } = state;
-  console.log(state);
-  console.log(contacts);
+  //console.log(state);
+  //console.log(contacts);
   const [anchorEl, setAnchorEl] = useState(null);
 
   // TODO: fetch all contacts for only the logged in user when Contacts component mounts
@@ -33,7 +32,7 @@ export default function Contacts(props) {
       dispatch,
       FETCH_ALL_CONTACTS_SUCCESS
     );
-    console.log(contacts);
+    //console.log(contacts);
   }, []);
 
   return (

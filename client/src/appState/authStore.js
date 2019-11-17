@@ -4,7 +4,6 @@ const initialAuthState = {
     error: {},
     user:{},
     isLoggedIn: false,
-    isJwtValid: false
 }
 
 export default initialAuthState;

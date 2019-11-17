@@ -1,7 +1,6 @@
 import React, {createContext, useEffect, useReducer} from 'react';
 import {authReducer} from './authReducer';
 import initialAuthState from "./authStore";
-import { FETCHING, LOGIN_SUCCESS } from "../appState/auhtActionTypes";
 import authService from '../services/authService';
 
 
@@ -19,7 +18,7 @@ export default function AuthProvider(props){
             // Everytime th authcontext mounts we check if a vlaid jwt token exists in the local storage,
             // if it exists the user is still logged in, if the token expired or is tampered with logout the user
             authService.verifyJwtToken(authDispatch);
-            console.log(authState);
+            //console.log(authState);
       }, []);
     return (<AuthContext.Provider value={{authState: authState, authDispatch: authDispatch}}>
         {props.children}

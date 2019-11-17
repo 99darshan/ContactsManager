@@ -1,9 +1,6 @@
-import React, {createContext, useEffect, useReducer} from 'react';
+import React, {createContext, useReducer} from 'react';
 import initialContactState from "./contactsStore";
 import {contactsReducer} from "./contactsReducer";
-import httpService from "../services/httpService";
-import {API_BASE_URL} from "../constants/routeConstants";
-import {FETCH_ALL_CONTACTS_SUCCESS, FETCHING} from "../appState/contactsActionTypes";
 
 export const ContactsContext = createContext();
 

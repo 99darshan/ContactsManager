@@ -23,8 +23,7 @@ import { ContactsContext } from "../appState/contactsContext";
 import httpService from "../services/httpService";
 import {
   CREATE_CONTACT_SUCCESS,
-  UPDATE_CONTACT_SUCCESS,
-  DELETE_CONTACT_SUCCESS
+  UPDATE_CONTACT_SUCCESS
 } from "../appState/contactsActionTypes";
 import SnackBar from "./SnackBar";
 import { API_BASE_URL } from "../constants/routeConstants";
@@ -63,7 +62,6 @@ export default function ContactTextFields(props) {
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
-        border: "1px solid  red",
         marginTop: "2rem",
         marginBottom: "1rem"
       }}
@@ -72,7 +70,8 @@ export default function ContactTextFields(props) {
         style={{
           width: "100%",
           maxWidth: "800px",
-          border: "1px solid yellow"
+          paddingLeft: "8px",
+          paddingRight: "8px"
         }}
       >
         <div
@@ -98,9 +97,7 @@ export default function ContactTextFields(props) {
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
-            border: "1px solid blue",
-            padding: "1rem" // TODO: use material theme spacing
+            flexDirection: "column"
           }}
         >
           <TextField
@@ -270,7 +267,6 @@ export default function ContactTextFields(props) {
               display: "flex",
               flexDirection: "row",
               justifyContent: "flex-end",
-              border: "1px solid black",
               padding: "1rem"
             }}
           >

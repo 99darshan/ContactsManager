@@ -1,4 +1,4 @@
-import { ERROR, FETCHING,LOGIN_SUCCESS, JWT_VERIFICATION_COMPLETE} from "../appState/auhtActionTypes";
+import { ERROR, FETCHING,LOGIN_SUCCESS} from "../appState/auhtActionTypes";
 import {API_BASE_URL} from "../constants/routeConstants";
 
 async function login(fbResponse, authDispatch) {
@@ -18,7 +18,6 @@ async function login(fbResponse, authDispatch) {
       })
     });
     let loginRes = await loginResponse.json();
-    console.log(loginRes);
     // response will have a jwt token, save it to local storage, use it to make any other subsequent requests
     // TODO: expore if it would be better to store as a http cookie on the server??
     window.localStorage.setItem("contactsManagerJwt", loginRes.jwt);
@@ -49,7 +48,7 @@ async function verifyJwtToken(authDispatch){
         type: FETCHING
     });
     try {
-        console.log(`${API_BASE_URL}/auth/verify-jwt-token`);
+        //console.log(`${API_BASE_URL}/auth/verify-jwt-token`);
         let verifyTokenResponse =await fetch(`${API_BASE_URL}/auth/verify-jwt-token`,{
             method: 'GET',
             headers:{
@@ -58,6 +57,7 @@ async function verifyJwtToken(authDispatch){
             }
         });
         // if 403 token is invalid or expired so delete the invalid jwt and dispatch the error action else dispatch sucess action
+        
         if(verifyTokenResponse.status===403){
             let verifyTokenRes = await verifyTokenResponse.json();
 
@@ -67,20 +67,14 @@ async function verifyJwtToken(authDispatch){
                 type:ERROR,
                 payload:{...verifyTokenRes}
             });
-            authDispatch({
-                type:JWT_VERIFICATION_COMPLETE,
-                payload:{isJwtValid:false}
-            });
         }else{
             console.log('set loging success');
+             let verTokenResJson = await verifyTokenResponse.json();
+            //console.log(verTokenResJson);
             authDispatch({
                 type:LOGIN_SUCCESS,
-                payload:{user:{}}
+                payload:{...verTokenResJson}
                 // payload:{user:{name:window.localStorage.getItem('contactsManagerUserName'), profilePicture:window.localStorage.getItem("contactsManagerUserProfile")}}
-            });
-            authDispatch({
-                type:JWT_VERIFICATION_COMPLETE,
-                payload:{isJwtValid:true}
             });
         }
     } catch (error) {
@@ -89,10 +83,6 @@ async function verifyJwtToken(authDispatch){
             authDispatch({
                 type:ERROR,
                 payload:{error}
-            });
-            authDispatch({
-                type:JWT_VERIFICATION_COMPLETE,
-                payload:{isJwtValid:false}
             });
     }
 }

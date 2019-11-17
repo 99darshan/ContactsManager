@@ -2,8 +2,7 @@ const initialContactState = {
     isFetching: false,
     hasError: false,
     error: {},
-    contacts: [],
-    currentContact:{}
+    contacts: []
 }
 
 export default initialContactState;
