@@ -80,23 +80,6 @@ export default function Contacts(props) {
                 src={window.localStorage.getItem("contactsManagerUserProfile")}
                 onClick={event => setAnchorEl(event.currentTarget)}
               />
-
-              // <Button
-              //   // TODO: this logout is a really inefficient solution,
-              //   // this deletes the jwt token from the local storage but the anyone with the token could still make requests as it is still valid till it expires in the server side
-              //   key="logoutButton"
-              //   color="inherit"
-              //   onClick={() => {
-              //     window.localStorage.removeItem("contactsManagerJwt");
-              //     window.localStorage.removeItem("contactsManagerUserProfile");
-              //     window.localStorage.removeItem("contactsManagerUserName");
-              //     authDispatch({
-              //       type: LOGOUT_SUCCESS
-              //     });
-              //   }}
-              // >
-              //   Log out
-              // </Button>
             ]}
           />
           <div
@@ -121,12 +104,11 @@ export default function Contacts(props) {
                   contact={item}
                   onFavoriteClick={() => {
                     console.log("favorite clicked");
-                    let newFavState = !item.isFavorite;
                     httpService.PUT(
                       `${API_BASE_URL}/contacts/${item.id}`,
                       {
                         ...item,
-                        isFavorite: newFavState
+                        isFavorite: !item.isFavorite
                       },
                       dispatch,
                       UPDATE_CONTACT_SUCCESS

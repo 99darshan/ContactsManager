@@ -2,7 +2,8 @@ import React, { useContext } from "react";
 import {
   ArrowBack,
   Edit,
-  FavoriteBorder,
+  Star,
+  StarBorder,
   DeleteForeverRounded
 } from "@material-ui/icons";
 import { IconButton } from "@material-ui/core";
@@ -11,7 +12,10 @@ import FabButton from "../components/FabButton";
 import ContactTextFields from "../components/ContactTextFields";
 import { EDIT, API_BASE_URL, CONTACTS } from "../constants/routeConstants";
 import { ContactsContext } from "../appState/contactsContext";
-import { DELETE_CONTACT_SUCCESS } from "../appState/contactsActionTypes";
+import {
+  DELETE_CONTACT_SUCCESS,
+  UPDATE_CONTACT_SUCCESS
+} from "../appState/contactsActionTypes";
 import httpService from "../services/httpService";
 import { Link } from "react-router-dom";
 export default function Details(props) {
@@ -24,14 +28,23 @@ export default function Details(props) {
     <IconButton
       key="favorite-button"
       onClick={() => {
-        console.log("favorite clicked");
+        console.log("favorite clicked on details");
+        httpService.PUT(
+          `${API_BASE_URL}/contacts/${currentContact.id}`,
+          {
+            ...currentContact,
+            isFavorite: !currentContact.isFavorite
+          },
+          dispatch,
+          UPDATE_CONTACT_SUCCESS
+        );
       }}
       edge="start"
       color="inherit"
       aria-label="favorite"
       style={{ marginRight: "1rem" }}
     >
-      <FavoriteBorder />
+      {currentContact.isFavorite ? <Star /> : <StarBorder />}
     </IconButton>
   );
 
@@ -59,6 +72,7 @@ export default function Details(props) {
   return (
     <React.Fragment>
       <NavBar
+        title={currentContact.firstName}
         leadingIcon={<ArrowBack />}
         navigateTo={CONTACTS}
         actionButtons={[favoriteActionButton, deleteActionButton]}
