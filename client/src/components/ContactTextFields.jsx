@@ -12,7 +12,13 @@ import {
   AddPhotoAlternate,
   Save
 } from "@material-ui/icons";
-import { TextField, InputAdornment, IconButton, Fab } from "@material-ui/core";
+import {
+  TextField,
+  InputAdornment,
+  IconButton,
+  Fab,
+  Avatar
+} from "@material-ui/core";
 import { ContactsContext } from "../appState/contactsContext";
 import httpService from "../services/httpService";
 import {
@@ -76,9 +82,18 @@ export default function ContactTextFields(props) {
             justifyContent: "center"
           }}
         >
-          <Fab color="secondary" aria-label="addProfilePhoto">
-            <AddPhotoAlternate />
-          </Fab>
+          {!props.isReadOnly && (
+            <Fab color="secondary" aria-label="addProfilePhoto">
+              <AddPhotoAlternate />
+            </Fab>
+          )}
+          {props.isReadOnly && (
+            <Avatar
+              alt={`${props.contact.firstName} ${props.contact.lastName}`}
+              src={`https://picsum.photos/seed/${props.contact.id}/600`}
+              style={{ width: 100, height: 100 }}
+            />
+          )}
         </div>
         <div
           style={{
