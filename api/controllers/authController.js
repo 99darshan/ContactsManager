@@ -109,7 +109,9 @@ let authController = {
       return res.status(500).json({ ...error, message: error.message });
     }
   },
+  // acts as a middleware to validate token and redirect request to the next middleware in request pipleline
   verifyJwtToken: async (req, res, next) => {
+    console.log('verfiy token route exists here');
     const authHeader = req.headers["authorization"];
     if (typeof authHeader !== "undefined") {
       const headerArr = authHeader.split(" ");
@@ -123,6 +125,36 @@ let authController = {
         // add facebook_id  obtained from decoded jwt data to the req object which will be used by the next() i.e. contacts controllers
         req.facebookId = decodedUserData.user["facebook_id"];
         next();
+      } catch (error) {
+        return res
+          .status(403)
+          .send({ error: { message: "Invalid or Expired JWT Token!!" } });
+      }
+    } else {
+      return res
+        .status(403)
+        .send({
+          error: { message: "No Authorization headers found in request!!" }
+        });
+    }
+  },
+  // endpoint to vlaidate jwt token exposed to client, return 200 on successful validation
+  validateJwtToken: async (req, res, next) => {
+    console.log('verfiy token route exists here');
+    const authHeader = req.headers["authorization"];
+    if (typeof authHeader !== "undefined") {
+      const headerArr = authHeader.split(" ");
+      const jwtToken = headerArr[1];
+      // verify the jwt token received in header
+      try {
+        const decodedUserData = await jwt.verify(
+          jwtToken,
+          process.env.JWT_SECRET
+        );
+        // add facebook_id  obtained from decoded jwt data to the req object which will be used by the next() i.e. contacts controllers
+        //req.facebookId = decodedUserData.user["facebook_id"];
+        //next();
+        return res.sendStatus(200);
       } catch (error) {
         return res
           .status(403)

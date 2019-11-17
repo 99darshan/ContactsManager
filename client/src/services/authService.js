@@ -1,4 +1,4 @@
-import { ERROR, FETCHING,LOGIN_SUCCESS } from "../appState/auhtActionTypes";
+import { ERROR, FETCHING,LOGIN_SUCCESS, JWT_VERIFICATION_COMPLETE} from "../appState/auhtActionTypes";
 import {API_BASE_URL} from "../constants/routeConstants";
 
 async function login(fbResponse, authDispatch) {
@@ -34,16 +34,72 @@ async function login(fbResponse, authDispatch) {
       type: LOGIN_SUCCESS,
       payload: { user: loginRes.user }
     });
+    
   } catch (error) {
       authDispatch({
           type:ERROR,
           payload:{error}
       });
+
   }
+}
+
+async function verifyJwtToken(authDispatch){
+    authDispatch({
+        type: FETCHING
+    });
+    try {
+        console.log(`${API_BASE_URL}/auth/verify-jwt-token`);
+        let verifyTokenResponse =await fetch(`${API_BASE_URL}/auth/verify-jwt-token`,{
+            method: 'GET',
+            headers:{
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${window.localStorage.getItem("contactsManagerJwt")}`
+            }
+        });
+        // if 403 token is invalid or expired so delete the invalid jwt and dispatch the error action else dispatch sucess action
+        if(verifyTokenResponse.status===403){
+            let verifyTokenRes = await verifyTokenResponse.json();
+
+            console.log(`403 , removing item`);
+            window.localStorage.removeItem("contactsManagerJwt");
+            authDispatch({
+                type:ERROR,
+                payload:{...verifyTokenRes}
+            });
+            authDispatch({
+                type:JWT_VERIFICATION_COMPLETE,
+                payload:{isJwtValid:false}
+            });
+        }else{
+            console.log('set loging success');
+            authDispatch({
+                type:LOGIN_SUCCESS,
+                payload:{user:{}}
+                // payload:{user:{name:window.localStorage.getItem('contactsManagerUserName'), profilePicture:window.localStorage.getItem("contactsManagerUserProfile")}}
+            });
+            authDispatch({
+                type:JWT_VERIFICATION_COMPLETE,
+                payload:{isJwtValid:true}
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        window.localStorage.removeItem("contactsManagerJwt");
+            authDispatch({
+                type:ERROR,
+                payload:{error}
+            });
+            authDispatch({
+                type:JWT_VERIFICATION_COMPLETE,
+                payload:{isJwtValid:false}
+            });
+    }
 }
 
 const authService ={
     login,
+    verifyJwtToken
 } 
 
 export default authService;

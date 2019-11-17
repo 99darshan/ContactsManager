@@ -8,20 +8,20 @@ import { FETCHING, LOGIN_SUCCESS } from "../appState/auhtActionTypes";
 import { AuthContext } from "../appState/authContext";
 import { Link } from "react-router-dom";
 import authService from "../services/authService";
+import { CircularProgress } from "@material-ui/core";
 export default function Home() {
   const { authState, authDispatch } = useContext(AuthContext);
-  console.log(authState);
 
   let onResponseFromFacebook = async response => {
     authService.login(response, authDispatch);
   };
 
   return (
-    // TODO: check auth  error state and show a error if error exists
-    // if login fails it will dispatch an ERROR event
     <React.Fragment>
+      {authState.isFetching && <CircularProgress />}
+
       <h1>Welcome to contacts manager, Public Home page</h1>
-      {!authState.isLoggedIn && (
+      {!authState.isLoggedIn && !authState.isFetching && (
         <FacebookLogin
           appId={process.env.REACT_APP_FACEBOOK_APP_ID}
           fields="name,email,picture"
@@ -30,7 +30,7 @@ export default function Home() {
           icon="fa-facebook"
         />
       )}
-      {authState.isLoggedIn && (
+      {authState.isLoggedIn && authState.isJwtValid && (
         <Button
           component={Link}
           to={CONTACTS}

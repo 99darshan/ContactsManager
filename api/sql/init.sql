@@ -10,7 +10,7 @@ CREATE TABLE contacts
     id SERIAL PRIMARY KEY,
     first_name VARCHAR NOT NULL,
     last_name VARCHAR,
-    phone_number INT NOT NULL,
+    phone_number BIGINT NOT NULL,
     company VARCHAR,
     email VARCHAR,
     address VARCHAR,
