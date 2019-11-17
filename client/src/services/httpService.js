@@ -12,9 +12,9 @@ async function GET(url, dispatch, actionType) {
   try {
     let response = await fetch(url, { 
       method: 'GET', 
-      headers: new Headers({
+      headers:{
         'Authorization': `Bearer ${window.localStorage.getItem("contactsManagerJwt")}`
-      })});
+      }});
     if (response.status === 200) {
       let res = await response.json();
       dispatch({
@@ -42,7 +42,8 @@ async function POST(url, reqBody, dispatch, actionType) {
     const response = await fetch(url, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${window.localStorage.getItem("contactsManagerJwt")}`
       },
       body: JSON.stringify(reqBody)
     });
@@ -73,7 +74,8 @@ async function PUT(url, reqBody, dispatch, actionType) {
     const response = await fetch(url, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${window.localStorage.getItem("contactsManagerJwt")}`
       },
       body: JSON.stringify(reqBody)
     });
@@ -108,7 +110,8 @@ async function DELETE(url, dispatch, actionType, deleteResourceId) {
     const response = await fetch(url, {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${window.localStorage.getItem("contactsManagerJwt")}`
       }
     });
     if (response.status === 200) {

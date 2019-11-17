@@ -3,7 +3,6 @@ const fetch = require("node-fetch");
 const jwt = require("jsonwebtoken");
 const { pool } = require("../configs/dbConfig");
 
-
 dotEnv.config();
 let authController = {
   facebookLogin: async (req, res, next) => {
@@ -70,7 +69,12 @@ let authController = {
           );
           return res.status(201).json({
             self: req.path,
-            user: createResult.rows[0],
+            user: {
+              facebookId: createResult.rows[0].facebook_id,
+              name: createResult.rows[0].name,
+              profilePicture: createResult.rows[0].profile_picture,
+              email: createResult.rows[0].email
+            },
             jwt: token
           });
         } else {
@@ -83,41 +87,53 @@ let authController = {
           );
           return res.status(200).json({
             self: req.path,
-            user: selectResult.rows[0],
+            user: {
+              facebookId: selectResult.rows[0].facebook_id,
+              name: selectResult.rows[0].name,
+              profilePicture: selectResult.rows[0].profile_picture,
+              email: selectResult.rows[0].email
+            },
             jwt: token
           });
         }
       } else {
-        return res
-          .status(403)
-          .json({
-            error: {
-              message:
-                "Invalid User Id !! User is not assigned to the given access token!!"
-            }
-          });
+        return res.status(403).json({
+          error: {
+            message:
+              "Invalid User Id !! User is not assigned to the given access token!!"
+          }
+        });
       }
     } catch (error) {
       console.log(error);
       return res.status(500).json({ ...error, message: error.message });
     }
   },
-  verifyJwtToken: async (req,res,next) =>{
-    const authHeader = req.headers['authorization'];
-    if(typeof authHeader !== "undefined"){
+  verifyJwtToken: async (req, res, next) => {
+    const authHeader = req.headers["authorization"];
+    if (typeof authHeader !== "undefined") {
       const headerArr = authHeader.split(" ");
       const jwtToken = headerArr[1];
       // verify the jwt token received in header
-      try { 
-        const decodedUserData = await jwt.verify(jwtToken, process.env.JWT_SECRET);
-        // add facebook_id  obtained from decoded jwt data to the req object
+      try {
+        const decodedUserData = await jwt.verify(
+          jwtToken,
+          process.env.JWT_SECRET
+        );
+        // add facebook_id  obtained from decoded jwt data to the req object which will be used by the next() i.e. contacts controllers
         req.facebookId = decodedUserData.user["facebook_id"];
         next();
       } catch (error) {
-        return res.status(403).send({error:{message:"Invalid or Expired JWT Token!!"}});
+        return res
+          .status(403)
+          .send({ error: { message: "Invalid or Expired JWT Token!!" } });
       }
-    }else{
-      return res.status(403).send({error:{message:"No Authorization headers found in request!!"}});
+    } else {
+      return res
+        .status(403)
+        .send({
+          error: { message: "No Authorization headers found in request!!" }
+        });
     }
   }
 };

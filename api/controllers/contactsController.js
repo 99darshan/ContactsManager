@@ -3,14 +3,23 @@ const { pool } = require("../configs/dbConfig");
 const contactsResponseMaker = require("../helpers/contactsResponseMaker");
 
 let contactsController = {
+  /**
+   * all contacts for a given user
+   */
   getAllContacts: async (req, res, next) => {
     try {
-      const result = await pool.query(`SELECT * FROM contacts;`);
+      console.log(req.facebookId);
+      const selectQuery = {
+        text: `SELECT * FROM contacts where facebook_id=$1`,
+        values: [req.facebookId]
+      };
+      const result = await pool.query(selectQuery);
       res.status(200).json(contactsResponseMaker.success(req, result.rows));
     } catch (error) {
       res.status(500).json(contactsResponseMaker.error(req, error));
     }
   },
+
   getContactById: async (req, res, next) => {
     try {
       const parsedId = parseInt(req.params.id);
@@ -24,8 +33,8 @@ let contactsController = {
         );
 
       const selectQuery = {
-        text: `SELECT * FROM contacts where id=$1`,
-        values: [parsedId]
+        text: `SELECT * FROM contacts where id=$1 and facebook_id=$2`,
+        values: [parsedId, req.facebookId]
       };
       const result = await pool.query(selectQuery);
       if (result.rows.length === 0)
@@ -76,7 +85,7 @@ let contactsController = {
 
       const insertQuery = {
         text:
-          "INSERT INTO contacts (first_name,last_name,phone_number,company,email,address,birthday) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+          "INSERT INTO contacts (first_name,last_name,phone_number,company,email,address,birthday,facebook_id) VALUES ($1, $2, $3, $4, $5, $6, $7,$8) RETURNING *",
         values: [
           newContact.firstName.trim(),
           newContact.lastName.trim(),
@@ -84,7 +93,8 @@ let contactsController = {
           newContact.company.trim(),
           newContact.email.trim(),
           newContact.address.trim(),
-          newContact.birthday
+          newContact.birthday,
+          req.facebookId
         ]
       };
 
@@ -108,8 +118,8 @@ let contactsController = {
       const parsedId = parseInt(req.params.id);
 
       const selectQuery = {
-        text: `SELECT * FROM contacts where id=$1`,
-        values: [parsedId]
+        text: `SELECT * FROM contacts where id=$1 and facebook_id=$2`,
+        values: [parsedId, req.facebookId]
       };
       const selectResult = await pool.query(selectQuery);
       if (selectResult.rows.length === 0) {
@@ -121,8 +131,8 @@ let contactsController = {
       }
 
       const deleteQuery = {
-        text: `DELETE FROM contacts where id = $1`,
-        values: [parsedId]
+        text: `DELETE FROM contacts where id = $1 and facebook_id = $2`,
+        values: [parsedId, req.facebookId],
       };
       const deleteResult = await pool.query(deleteQuery);
       res
@@ -145,8 +155,8 @@ let contactsController = {
       const parsedId = parseInt(req.params.id);
 
       const selectQuery = {
-        text: `SELECT * FROM contacts where id=$1`,
-        values: [parsedId]
+        text: `SELECT * FROM contacts where id=$1 and facebook_id=$2`,
+        values: [parsedId, req.facebookId]
       };
       const selectResult = await pool.query(selectQuery);
       if (selectResult.rows.length === 0) {
@@ -169,7 +179,7 @@ let contactsController = {
 
       const updateQuery = {
         text:
-          "UPDATE contacts set first_name = $1, last_name = $2, phone_number = $3, company = $4, email = $5, address = $6, birthday = $7 where id = $8 RETURNING *",
+          "UPDATE contacts set first_name = $1, last_name = $2, phone_number = $3, company = $4, email = $5, address = $6, birthday = $7 where id = $8 and facebook_id=$9 RETURNING *",
         values: [
           updatedContact.firstName.trim(),
           updatedContact.lastName.trim(),
@@ -178,7 +188,8 @@ let contactsController = {
           updatedContact.email.trim(),
           updatedContact.address.trim(),
           updatedContact.birthday,
-          parsedId
+          parsedId,
+          req.facebookId
         ]
       };
 

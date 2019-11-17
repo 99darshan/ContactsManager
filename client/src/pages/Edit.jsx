@@ -9,8 +9,8 @@ export default function Edit(props) {
   let { state, dispatch } = useContext(ContactsContext);
   const { match } = props;
   const paramId = parseInt(match.params.id);
-  const currentContact = state.contacts.find(contact => contact.id === paramId);
 
+  const currentContact = state.contacts.find(contact => contact.id === paramId);
   return (
     <React.Fragment>
       <NavBar leadingIcon={<Close />} title="Edit" navigateTo={CONTACTS} />

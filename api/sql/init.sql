@@ -14,13 +14,15 @@ CREATE TABLE contacts
     company VARCHAR,
     email VARCHAR,
     address VARCHAR,
-    birthday DATE
+    birthday DATE,
+    is_favorite BOOLEAN DEFAULT false,
+    facebook_id BIGINT not null
 );
 
 CREATE TABLE users
 (
     id SERIAL PRIMARY KEY,
-    facebook_id BIGINT not null,
+    facebook_id BIGINT UNIQUE not null,
     name varchar,
     email varchar,
     profile_picture varchar
