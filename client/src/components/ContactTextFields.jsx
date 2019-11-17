@@ -24,7 +24,7 @@ import { API_BASE_URL } from "../constants/routeConstants";
 
 export default function ContactTextFields(props) {
   const { state, dispatch } = useContext(ContactsContext);
-  const { contacts } = state;
+  const { hasError, errors, contacts } = state;
   //console.table(props.contact);
   let [firstNameValue, setFirstNameValue] = useState(
     props.contact ? props.contact.firstName : ""
@@ -169,21 +169,33 @@ export default function ContactTextFields(props) {
                   phoneNumber: parseInt(phoneNumberValue) // TODO: validate to make sure parsing doesn't fail
                 };
                 if (props.saveActionType === "ADD") {
-                  httpService.POST(
+                  await httpService.POST(
                     `${API_BASE_URL}/contacts`,
                     newContact,
                     dispatch,
                     CREATE_CONTACT_SUCCESS
                   );
+
+                  console.log("hasError in save..." + hasError);
+                  if (!hasError) {
+                    console.log("redirect hasError in save..." + hasError);
+                    //props.routeHistory.goBack();
+                  }
                 } else {
-                  httpService.PUT(
+                  await httpService.PUT(
                     `${API_BASE_URL}/contacts/${props.contact.id}`,
                     newContact,
                     dispatch,
                     UPDATE_CONTACT_SUCCESS
                   );
                 }
-                props.routeHistory.goBack();
+                // setTimeout(()=>{
+                //   console.log("hasError in save..." + hasError);
+                //   if (!hasError) {
+                //     console.log("hasError in save..." + hasError);
+                //     props.routeHistory.goBack();
+                //   }
+                // },5000);
               }}
             />
             <div style={{ marginRight: "1rem" }} />

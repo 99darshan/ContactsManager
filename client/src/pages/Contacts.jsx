@@ -21,12 +21,16 @@ export default function Contacts(props) {
   console.log(contacts);
   // TODO: fetch all contacts for only the logged in user when Contacts component mounts
   useEffect(() => {
-    dispatch({ type: FETCHING });
-    httpService.GET(
-      `${routes.API_BASE_URL}/contacts`,
-      dispatch,
-      FETCH_ALL_CONTACTS_SUCCESS
-    );
+    console.log("hass effect " + hasError);
+    // TODO: should check for error? this is the only place to reset errors and get all contacts???
+    if (!hasError) {
+      dispatch({ type: FETCHING });
+      httpService.GET(
+        `${routes.API_BASE_URL}/contacts`,
+        dispatch,
+        FETCH_ALL_CONTACTS_SUCCESS
+      );
+    }
   }, []);
   return (
     <React.Fragment>

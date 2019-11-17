@@ -47,15 +47,14 @@ async function POST(url, reqBody, dispatch, actionType) {
       body: JSON.stringify(reqBody)
     });
     console.log('post status:' +  response.status);
+    const res = await response.json();
     if (response.status === 200 || response.status === 201) {
-      const res = await response.json();
       dispatch({
         type: actionType,
         payload: { values: res.values }
       });
     } else {
-      let res = await response.json();
-
+      console.log('dispatching error action....');
       dispatch({
         type: ERROR,
         payload: { error: res.error }
