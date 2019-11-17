@@ -67,7 +67,6 @@ export const contactsReducer = (state, action) => {
     // case actionTypes.ERROR_FETCHING_DATA:
     //     break;
     case actionTypes.ERROR: 
-      //TODO:
-      break;
+      return {...state, isFetching: false, contacts:[],hasError: true, error:{...action.payload.error}}
   }
 };

@@ -3,14 +3,15 @@ const fetch = require("node-fetch");
 const jwt = require("jsonwebtoken");
 const { pool } = require("../configs/dbConfig");
 
+
 dotEnv.config();
 let authController = {
   facebookLogin: async (req, res, next) => {
-    // TODO: respond error if no access token or userid in request body
+    // respond error if no access token or userid in request body
     const accessToken = req.body.accessToken;
-    const userId = req.body.userId;
+    const fbUserId = req.body.fbUserId;
 
-    if (!accessToken || !userId) {
+    if (!accessToken || !fbUserId) {
       return res.status(403).json({
         error: {
           message: "Inalid Facebook accessToken or UserId."
@@ -35,15 +36,15 @@ let authController = {
       }
       // if validity of access token checks out for our app, grab the user profile info
       let userResponse = await fetch(
-        `https://graph.facebook.com/${userId}?fields=name,email,picture&access_token=${accessToken}`
+        `https://graph.facebook.com/${fbUserId}?fields=name,email,picture&access_token=${accessToken}`
       );
-      let userRes = await userResponse.json();
-      // validate if the userId from response of facebook graph api server is same as the userId passed in the request
-      if (userId === userRes.id) {
+      let fbUserRes = await userResponse.json();
+      // validate if the userId from response of facebook graph api server is same as the fbuserId passed in the request
+      if (fbUserId === fbUserRes.id) {
         // check if the user exists in our database
         const selectQuery = {
           text: `SELECT * FROM users where facebook_id=$1`,
-          values: [userRes.id]
+          values: [fbUserRes.id]
         };
         let selectResult = await pool.query(selectQuery);
         console.log(selectResult.rows.length === 0);
@@ -54,10 +55,10 @@ let authController = {
             text:
               "INSERT INTO users (facebook_id,name,email, profile_picture) VALUES ($1, $2, $3, $4) RETURNING *",
             values: [
-              userRes.id,
-              userRes.name || "",
-              userRes.email || "",
-              userRes.picture.data.url || ""
+              fbUserRes.id,
+              fbUserRes.name || "",
+              fbUserRes.email || "",
+              fbUserRes.picture.data.url || ""
             ]
           };
           const createResult = await pool.query(insertQuery);
@@ -99,6 +100,24 @@ let authController = {
     } catch (error) {
       console.log(error);
       return res.status(500).json({ ...error, message: error.message });
+    }
+  },
+  verifyJwtToken: async (req,res,next) =>{
+    const authHeader = req.headers['authorization'];
+    if(typeof authHeader !== "undefined"){
+      const headerArr = authHeader.split(" ");
+      const jwtToken = headerArr[1];
+      // verify the jwt token received in header
+      try { 
+        const decodedUserData = await jwt.verify(jwtToken, process.env.JWT_SECRET);
+        // add facebook_id  obtained from decoded jwt data to the req object
+        req.facebookId = decodedUserData.user["facebook_id"];
+        next();
+      } catch (error) {
+        return res.status(403).send({error:{message:"Invalid or Expired JWT Token!!"}});
+      }
+    }else{
+      return res.status(403).send({error:{message:"No Authorization headers found in request!!"}});
     }
   }
 };

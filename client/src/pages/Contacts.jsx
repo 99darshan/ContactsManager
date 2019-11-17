@@ -16,7 +16,7 @@ import httpService from "../services/httpService";
 
 export default function Contacts(props) {
   const { state, dispatch } = useContext(ContactsContext);
-  const { contacts } = state;
+  const { contacts, hasError, error } = state;
   console.log(state);
   console.log(contacts);
   // TODO: fetch all contacts for only the logged in user when Contacts component mounts
@@ -30,42 +30,53 @@ export default function Contacts(props) {
   }, []);
   return (
     <React.Fragment>
-      <NavBar
-        title="Contacts Manager"
-        leadingIcon={<Menu />}
-        navigateTo={CONTACTS}
-        actionButtons={[
-          <Button key="loginButton" color="inherit">
-            Log In
-          </Button>
-        ]}
-      />
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center"
-        }}
-      >
-        <div
-          style={{
-            width: "100%",
-            maxWidth: "800px"
-          }}
-        >
-          {contacts.map(item => (
-            //console.log(item)
-            <ContactListItem
-              key={item.id}
-              id={item.id}
-              avatar="https://i.pravatar.cc/300"
-              contact={item}
-            />
-          ))}
-        </div>
-      </div>
+      {/* TODO: design error card */}
+      {hasError && <h2>Error fetching all contacts!! {error.messsage} </h2>}
 
-      <FabButton navigateTo={routes.ADD} labelText="add" icon={<AddIcon />} />
+      {!hasError && (
+        <>
+          <NavBar
+            title="Contacts Manager"
+            leadingIcon={<Menu />}
+            navigateTo={CONTACTS}
+            actionButtons={[
+              <Button key="loginButton" color="inherit">
+                Log In
+              </Button>
+            ]}
+          />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center"
+            }}
+          >
+            <div
+              style={{
+                width: "100%",
+                maxWidth: "800px"
+              }}
+            >
+              {contacts.map(item => (
+                //console.log(item)
+                <ContactListItem
+                  key={item.id}
+                  id={item.id}
+                  avatar="https://i.pravatar.cc/300"
+                  contact={item}
+                />
+              ))}
+            </div>
+          </div>
+
+          <FabButton
+            navigateTo={routes.ADD}
+            labelText="add"
+            icon={<AddIcon />}
+          />
+        </>
+      )}
     </React.Fragment>
   );
 }

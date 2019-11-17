@@ -10,7 +10,11 @@ import {ERROR} from '../appState/contactsActionTypes';
 // TODO: send successActionType and FailureActionType makes this service modular and can be used by any other context
 async function GET(url, dispatch, actionType) {
   try {
-    let response = await fetch(url);
+    let response = await fetch(url, { 
+      method: 'GET', 
+      headers: new Headers({
+        'Authorization': `Bearer ${window.localStorage.getItem("contactsManagerJwt")}`
+      })});
     if (response.status === 200) {
       let res = await response.json();
       dispatch({
@@ -21,7 +25,7 @@ async function GET(url, dispatch, actionType) {
       let res = await response.json();
       dispatch({
         type: ERROR,
-        payload: { error: res.error }
+        payload: { error:res.error }
       });
     }
   } catch (error) {

@@ -22,7 +22,7 @@ export default function Home() {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        userId: response.userID,
+        fbUserId: response.userID,
         accessToken: response.accessToken
       })
     });
@@ -41,6 +41,8 @@ export default function Home() {
     console.log("login clicked");
   };
   return (
+    // TODO: check auth  error state and show a error if error exists
+    // if login fails it will dispatch an ERROR event
     <React.Fragment>
       <h1>Welcome to contacts manager, Public Home page</h1>
       {!authState.isLoggedIn && (
