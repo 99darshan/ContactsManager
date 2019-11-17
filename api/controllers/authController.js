@@ -109,6 +109,7 @@ let authController = {
       return res.status(500).json({ ...error, message: error.message });
     }
   },
+  // TODO: verifyJwtToken and validate JwtToken has shared logic, breaks DRY 
   // acts as a middleware to validate token and redirect request to the next middleware in request pipleline
   verifyJwtToken: async (req, res, next) => {
     console.log('verfiy token route exists here');
@@ -154,7 +155,13 @@ let authController = {
         // add facebook_id  obtained from decoded jwt data to the req object which will be used by the next() i.e. contacts controllers
         //req.facebookId = decodedUserData.user["facebook_id"];
         //next();
-        return res.sendStatus(200);
+        
+        return res.status(200).json({user:{
+          facebookId: decodedUserData.user["facebook_id"],
+          name: decodedUserData.user.name,
+          profilePicture: decodedUserData.user["profile_picture"],
+          email: decodedUserData.user.email
+        }});
       } catch (error) {
         return res
           .status(403)
