@@ -9,12 +9,12 @@ import { AuthContext } from "../appState/authContext";
 import { Link } from "react-router-dom";
 
 export default function Home() {
-  const { authState, dispatch } = useContext(AuthContext);
+  const { authState, authDispatch } = useContext(AuthContext);
   console.log(authState);
 
   let onResponseFromFacebook = async response => {
     console.log(response);
-    dispatch({
+    authDispatch({
       type: FETCHING
     });
     // TODO: try catch? move to auth service,??
@@ -37,7 +37,7 @@ export default function Home() {
     window.localStorage.setItem("contactsManagerUserName", loginRes.user.name);
     // response will have a jwt token, save it to local storage, use it to make any other subsequent requests
     // TODO: save jwt to local storage
-    dispatch({
+    authDispatch({
       type: LOGIN_SUCCESS,
       payload: { user: loginRes.user }
     });
