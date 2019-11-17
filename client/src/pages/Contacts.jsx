@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import FabButton from "../components/FabButton";
 import ContactListItem from "../components/ContactListItem";
-import { Menu, Add as AddIcon } from "@material-ui/icons";
-import { Button } from "@material-ui/core";
+import { Menu as MenuIcon, Add as AddIcon } from "@material-ui/icons";
+import { Button, Avatar, Menu, MenuItem } from "@material-ui/core";
 import * as routes from "../constants/routeConstants";
 import { Link } from "react-router-dom";
 import { ContactsContext } from "../appState/contactsContext";
@@ -22,10 +22,9 @@ export default function Contacts(props) {
   const { contacts, hasError, error } = state;
   console.log(state);
   console.log(contacts);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   // TODO: fetch all contacts for only the logged in user when Contacts component mounts
   useEffect(() => {
-    console.log("hass effect " + hasError);
-
     dispatch({ type: FETCHING });
     httpService.GET(
       `${routes.API_BASE_URL}/contacts`,
@@ -33,6 +32,7 @@ export default function Contacts(props) {
       FETCH_ALL_CONTACTS_SUCCESS
     );
   }, []);
+
   return (
     <React.Fragment>
       {/* TODO: design error card */}
@@ -40,27 +40,59 @@ export default function Contacts(props) {
 
       {!hasError && (
         <>
-          <NavBar
-            title="Contacts Manager"
-            leadingIcon={<Menu />}
-            navigateTo={CONTACTS}
-            actionButtons={[
-              <Button
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={() => setAnchorEl(null)}
+            style={{ marginTop: "3rem" }}
+          >
+            <MenuItem>
+              {window.localStorage.getItem("contactsManagerUserName")}
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
                 // TODO: this logout is a really inefficient solution,
                 // this deletes the jwt token from the local storage but the anyone with the token could still make requests as it is still valid till it expires in the server side
-                key="logoutButton"
-                color="inherit"
-                onClick={() => {
-                  window.localStorage.removeItem("contactsManagerJwt");
-                  window.localStorage.removeItem("contactsManagerUserProfile");
-                  window.localStorage.removeItem("contactsManagerUserName");
-                  authDispatch({
-                    type: LOGOUT_SUCCESS
-                  });
-                }}
-              >
-                Log out
-              </Button>
+                setAnchorEl(null);
+                window.localStorage.removeItem("contactsManagerJwt");
+                window.localStorage.removeItem("contactsManagerUserProfile");
+                window.localStorage.removeItem("contactsManagerUserName");
+                authDispatch({
+                  type: LOGOUT_SUCCESS
+                });
+              }}
+            >
+              Logout
+            </MenuItem>
+          </Menu>
+          <NavBar
+            title="Contacts Manager"
+            leadingIcon={<MenuIcon />}
+            navigateTo={CONTACTS}
+            actionButtons={[
+              <Avatar
+                key="avatar"
+                src={window.localStorage.getItem("contactsManagerUserProfile")}
+                onClick={event => setAnchorEl(event.currentTarget)}
+              />
+              // <Button
+              //   // TODO: this logout is a really inefficient solution,
+              //   // this deletes the jwt token from the local storage but the anyone with the token could still make requests as it is still valid till it expires in the server side
+              //   key="logoutButton"
+              //   color="inherit"
+              //   onClick={() => {
+              //     window.localStorage.removeItem("contactsManagerJwt");
+              //     window.localStorage.removeItem("contactsManagerUserProfile");
+              //     window.localStorage.removeItem("contactsManagerUserName");
+              //     authDispatch({
+              //       type: LOGOUT_SUCCESS
+              //     });
+              //   }}
+              // >
+              //   Log out
+              // </Button>
             ]}
           />
           <div
@@ -81,7 +113,7 @@ export default function Contacts(props) {
                 <ContactListItem
                   key={item.id}
                   id={item.id}
-                  avatar="https://i.pravatar.cc/300"
+                  avatar={`https://picsum.photos/seed/${item.id}/300`}
                   contact={item}
                 />
               ))}

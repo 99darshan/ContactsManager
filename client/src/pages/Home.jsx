@@ -30,7 +30,7 @@ export default function Home() {
           icon="fa-facebook"
         />
       )}
-      {authState.isLoggedIn && authState.isJwtValid && (
+      {authState.isLoggedIn && (
         <Button
           component={Link}
           to={CONTACTS}

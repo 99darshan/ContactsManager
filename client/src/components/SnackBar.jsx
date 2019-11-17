@@ -32,7 +32,7 @@ export default function SnackBar(props) {
 }
 
 SnackBar.propTypes = {
-  onClick: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
   openSnackbar: PropTypes.bool.isRequired,
   snackbarMessage: PropTypes.string
 };
