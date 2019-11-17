@@ -62,7 +62,7 @@ let authController = {
           };
           const createResult = await pool.query(insertQuery);
           console.log(createResult.rows);
-
+          // TODO: expirty of token
           let token = await jwt.sign(
             { user: createResult.rows[0] },
             process.env.JWT_SECRET

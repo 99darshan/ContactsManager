@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useContext} from "react";
 import Contacts from "./pages/Contacts";
 import Add from "./pages/Add";
 import Details from "./pages/Details";
@@ -25,10 +25,6 @@ function App() {
           <Route path={routes.LOGIN} component = {Login} exact />
           <Route path={routes.HOME} component={Home} exact />
           {/* TODO: add not found route and corresponding component */}
-
-          {/* NOTE: render Details screen using the component prop not as a child, react router v5 will have an undefined match prop if used as a child instead of a component prop */}
-          {/* <Route path={routes.DETAILS} exact component={Details}></Route> */}
-
         </Switch>
       </BrowserRouter>
     </ContactsProvider>

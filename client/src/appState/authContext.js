@@ -10,7 +10,7 @@ export default function AuthProvider(props){
     // reducer and initialState are passed as props to the ContactsProvider
     let [state, dispatch] = useReducer(authReducer, initialAuthState); 
 
-    return (<AuthContext.Provider value={{state, dispatch}}>
+    return (<AuthContext.Provider value={{authState: state, dispatch}}>
         {props.children}
     </AuthContext.Provider>)
 };

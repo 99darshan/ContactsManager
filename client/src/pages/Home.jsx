@@ -8,8 +8,8 @@ import { FETCHING, LOGIN_SUCCESS } from "../appState/auhtActionTypes";
 import { AuthContext } from "../appState/authContext";
 
 export default function Home() {
-  const { state, dispatch } = useContext(AuthContext);
-
+  const { authState, dispatch } = useContext(AuthContext);
+  console.log(authState);
   let onResponseFromFacebook = async response => {
     console.log(response);
     dispatch({
@@ -27,6 +27,7 @@ export default function Home() {
       })
     });
     let loginRes = await loginResponse.json();
+    window.localStorage.setItem("contactsManagerJwt", loginRes.jwt);
     // response will have a jwt token, save it to local storage, use it to make any other subsequent requests
     // TODO: save jwt to local storage
     dispatch({
@@ -39,19 +40,24 @@ export default function Home() {
   let onFbLoginButtonClick = async () => {
     console.log("login clicked");
   };
-  //console.log(process.env.REACT_APP_FACEBOOK_APP_ID);
   return (
     <React.Fragment>
       <h1>Welcome to contacts manager, Public Home page</h1>
-      <Button onClick={onFbLoginButtonClick}>FB Login</Button>
-      <FacebookLogin
-        appId={process.env.REACT_APP_FACEBOOK_APP_ID}
-        fields="name,email,picture"
-        onClick={onFbLoginButtonClick}
-        callback={onResponseFromFacebook}
-        icon="fa-facebook"
-      />
-      {state.isLoggedIn && <Redirect to={CONTACTS} />}
+      {!authState.isLoggedIn && (
+        <FacebookLogin
+          appId={process.env.REACT_APP_FACEBOOK_APP_ID}
+          fields="name,email,picture"
+          onClick={onFbLoginButtonClick}
+          callback={onResponseFromFacebook}
+          icon="fa-facebook"
+        />
+      )}
+      {/* {authState.isLoggedIn && (
+        <Button component={Link} to={CONTACTS} primary>
+          View Contacts
+        </Button>
+      )} */}
+      {authState.isLoggedIn && <Redirect to={CONTACTS} />}
     </React.Fragment>
   );
 }
