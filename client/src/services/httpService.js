@@ -70,6 +70,8 @@ async function POST(url, reqBody, dispatch, actionType) {
 }
 
 async function PUT(url, reqBody, dispatch, actionType) {
+  console.log("put...");
+  console.log(reqBody);
   try {
     const response = await fetch(url, {
       method: "PUT",

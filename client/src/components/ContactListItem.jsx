@@ -9,10 +9,10 @@ import {
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { Star, Edit } from "@material-ui/icons";
-import { DETAILS } from "../constants/routeConstants";
-import { EDIT } from "../constants/routeConstants";
-
+import { Star, StarBorder, Edit } from "@material-ui/icons";
+import { DETAILS, API_BASE_URL, EDIT } from "../constants/routeConstants";
+import httpService from "../services/httpService";
+import { UPDATE_CONTACT_SUCCESS } from "../appState/contactsActionTypes";
 export default function ContactListItem(props) {
   return (
     <React.Fragment>
@@ -42,12 +42,9 @@ export default function ContactListItem(props) {
           <IconButton
             edge="end"
             aria-label="favorite"
-            onClick={() => {
-              console.log("favorite clicked");
-              // make put request to update the favorite contacts
-            }}
+            onClick={props.onFavoriteClick}
           >
-            <Star />
+            {props.contact.isFavorite ? <Star /> : <StarBorder />}
           </IconButton>
           <IconButton
             component={Link}

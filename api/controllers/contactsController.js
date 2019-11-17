@@ -68,7 +68,7 @@ let contactsController = {
         email: req.body.email || "",
         phoneNumber: req.body.phoneNumber,
         address: req.body.address || "",
-        birthday: req.body.birthday || null
+        birthday: req.body.birthday || null,
       };
       //console.log(newContact);
       //const parsedBirthday = newContact.birthday === null ? null :  `'${newContact.birthday}'`
@@ -78,7 +78,7 @@ let contactsController = {
 
       const insertQuery = {
         text:
-          "INSERT INTO contacts (first_name,last_name,phone_number,company,email,address,birthday,facebook_id) VALUES ($1, $2, $3, $4, $5, $6, $7,$8) RETURNING *",
+          "INSERT INTO contacts (first_name,last_name,phone_number,company,email,address,birthday,is_favorite,facebook_id) VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9) RETURNING *",
         values: [
           newContact.firstName.trim(),
           newContact.lastName.trim(),
@@ -87,6 +87,7 @@ let contactsController = {
           newContact.email.trim(),
           newContact.address.trim(),
           newContact.birthday,
+          req.body.isFavorite, // favorite db default value is false
           req.facebookId
         ]
       };
@@ -175,12 +176,13 @@ let contactsController = {
         email: req.body.email || "",
         phoneNumber: req.body.phoneNumber,
         address: req.body.address || "",
-        birthday: req.body.birthday || null
+        birthday: req.body.birthday || null,
+        isFavorite: req.body.isFavorite
       };
 
       const updateQuery = {
         text:
-          "UPDATE contacts set first_name = $1, last_name = $2, phone_number = $3, company = $4, email = $5, address = $6, birthday = $7 where id = $8 and facebook_id=$9 RETURNING *",
+          "UPDATE contacts set first_name = $1, last_name = $2, phone_number = $3, company = $4, email = $5, address = $6, birthday = $7, is_favorite = $8 where id = $9 and facebook_id=$10 RETURNING *",
         values: [
           updatedContact.firstName.trim(),
           updatedContact.lastName.trim(),
@@ -189,6 +191,7 @@ let contactsController = {
           updatedContact.email.trim(),
           updatedContact.address.trim(),
           updatedContact.birthday,
+          updatedContact.isFavorite,
           parsedId,
           req.facebookId
         ]

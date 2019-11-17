@@ -15,7 +15,8 @@ const contactsResponseMaker = {
         company: item.company || "",
         email: item.email || "",
         address: item.address || "",
-        birthday: item.birthday || ""
+        birthday: item.birthday || "",
+        isFavorite: item.is_favorite
       }))
     };
     return Object.freeze(responseJson);
