@@ -20,6 +20,7 @@ import {
   UPDATE_CONTACT_SUCCESS,
   DELETE_CONTACT_SUCCESS
 } from "../appState/contactsActionTypes";
+import SnackBar from "./SnackBar";
 import { API_BASE_URL } from "../constants/routeConstants";
 export default function ContactTextFields(props) {
   const { state, dispatch } = useContext(ContactsContext);
@@ -46,6 +47,9 @@ export default function ContactTextFields(props) {
   let [birthdayValue, setBirthdayValue] = useState(
     props.contact ? props.contact.birthday : ""
   );
+
+  let [openSnackbar, setOpenSnackbar] = useState(false);
+  let [snackbarMessage, setSnackbarMessage] = useState("");
 
   return (
     <div
@@ -236,6 +240,13 @@ export default function ContactTextFields(props) {
               )
             }}
           />
+          <SnackBar
+            openSnackbar={openSnackbar}
+            onClose={() => {
+              setOpenSnackbar(false);
+            }}
+            snackbarMessage={snackbarMessage}
+          />
           {/* TOOD: Add Birthday date picker */}
         </div>
         {!props.isReadOnly && (
@@ -261,6 +272,8 @@ export default function ContactTextFields(props) {
                   (emailValue && !/\S+@\S+\.\S+/.test(emailValue))
                 ) {
                   console.log("invalid save items");
+                  setSnackbarMessage("Invalid Entries !!");
+                  setOpenSnackbar(true);
                   return;
                 }
                 let newContact = {
@@ -278,6 +291,8 @@ export default function ContactTextFields(props) {
                     dispatch,
                     CREATE_CONTACT_SUCCESS
                   );
+                  setSnackbarMessage("New Contact Created !!");
+                  setOpenSnackbar(true);
                   props.routeHistory.goBack();
                 } else {
                   await httpService.PUT(
@@ -286,6 +301,8 @@ export default function ContactTextFields(props) {
                     dispatch,
                     UPDATE_CONTACT_SUCCESS
                   );
+                  setSnackbarMessage("Contact Info Updated !!");
+                  setOpenSnackbar(true);
                   props.routeHistory.goBack();
                 }
               }}
