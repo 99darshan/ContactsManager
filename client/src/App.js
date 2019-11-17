@@ -3,7 +3,6 @@ import Contacts from "./pages/Contacts";
 import Add from "./pages/Add";
 import Details from "./pages/Details";
 import Edit from "./pages/Edit";
-import Login from "./pages/Login";
 import Home from "./pages/Home";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import * as routes from "./constants/routeConstants";
@@ -22,7 +21,6 @@ function App() {
           <PrivateRoute path={routes.ADD} component={Add} exact />
           <PrivateRoute path={routes.DETAILS} component = {Details} exact />
           <PrivateRoute path={routes.EDIT} component={Edit} exact />
-          <Route path={routes.LOGIN} component = {Login} exact />
           <Route path={routes.HOME} component={Home} exact />
           {/* TODO: add not found route and corresponding component */}
         </Switch>
